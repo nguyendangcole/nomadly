@@ -1,6 +1,7 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useTravel } from '../context/TravelContext';
+import TravelBuddyModal from './TravelBuddyModal';
 import Sidebar from './Sidebar';
 import AuthModal from './AuthModal';
 import NotificationsDropdown from './NotificationsDropdown';
@@ -11,6 +12,8 @@ export default function Explore() {
   const [authModal, setAuthModal] = useState({ isOpen: false, message: '' });
   const [search, setSearch] = useState('');
   const [activeFilter, setActiveFilter] = useState('All');
+  const [showBuddyModal, setShowBuddyModal] = useState(false);
+  const [selectedTrip, setSelectedTrip] = useState(null);
   const [priceRange, setPriceRange] = useState('Any');
   const [forceLoad, setForceLoad] = useState(false);
 
@@ -248,6 +251,22 @@ export default function Explore() {
                               {savedTripIds.includes(trip.id) ? 'bookmark' : 'bookmark_border'}
                             </span>
                           </button>
+                          <button
+                            onClick={(e) => {
+                              e.preventDefault();
+                              e.stopPropagation();
+                              if (!user) {
+                                setAuthModal({ isOpen: true, message: 'Please log in to invite travel buddies!' });
+                                return;
+                              }
+                              setSelectedTrip(trip);
+                              setShowBuddyModal(true);
+                            }}
+                            title="Invite Travel Buddy"
+                            className="flex items-center gap-1 hover:text-y2k-pink transition-colors z-20"
+                          >
+                            <span className="material-symbols-outlined text-[18px]">group_add</span>
+                          </button>
                         </div>
                       </div>
                     </div>
@@ -270,6 +289,16 @@ export default function Explore() {
         isOpen={authModal.isOpen}
         onClose={() => setAuthModal({ ...authModal, isOpen: false })}
         message={authModal.message}
+      />
+      
+      <TravelBuddyModal
+        isOpen={showBuddyModal}
+        onClose={() => {
+          setShowBuddyModal(false);
+          setSelectedTrip(null);
+        }}
+        trip={selectedTrip}
+        currentUser={user}
       />
     </div>
   );

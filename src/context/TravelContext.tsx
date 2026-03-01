@@ -112,6 +112,25 @@ export type TripComment = {
 
 export type NotificationType = 'follow' | 'comment' | 'post';
 
+export type TravelBuddyRequest = {
+  id: string;
+  tripId: string;
+  requesterId: string;
+  message: string;
+  status: 'pending' | 'accepted' | 'declined';
+  createdAt: string;
+  trip?: {
+    title: string;
+    destinationSummary: string;
+    startDate: string;
+    endDate: string;
+  };
+  requester?: {
+    name: string;
+    avatar_url: string;
+  };
+};
+
 export type TripNotification = {
   id: string;
   userId: string; // The user receiving the notification
@@ -133,6 +152,7 @@ type TravelContextValue = {
   reviews: Review[];
   tripComments: TripComment[];
   notifications: TripNotification[];
+  travelBuddyRequests: TravelBuddyRequest[];
   isLoading: boolean;
   isAuthLoading: boolean;
   error: string | null;
@@ -176,6 +196,11 @@ type TravelContextValue = {
   markNotificationAsRead: (id: string) => void;
   markAllNotificationsAsRead: () => void;
 
+  // Travel Buddy actions
+  createTravelBuddyRequest: (params: { tripId: string; requesterId: string; message: string }) => Promise<void>;
+  updateTravelBuddyRequest: (id: string, status: 'accepted' | 'declined') => Promise<void>;
+  getTravelBuddyRequests: (userId: string) => Promise<void>;
+
   // Theme actions
   isDarkMode: boolean;
   toggleTheme: () => void;
@@ -207,6 +232,7 @@ export const TravelProvider: React.FC<{ children: React.ReactNode }> = ({ childr
   const [reviews, setReviews] = useState<Review[]>([]);
   const [tripComments, setTripComments] = useState<TripComment[]>([]);
   const [notifications, setNotifications] = useState<TripNotification[]>([]);
+  const [travelBuddyRequests, setTravelBuddyRequests] = useState<TravelBuddyRequest[]>([]);
   const [isDarkMode, setIsDarkMode] = useState<boolean>(() => loadThemeFromStorage());
   const [isLoading, setIsLoading] = useState(true);
   const [isAuthLoading, setIsAuthLoading] = useState(true);
@@ -971,6 +997,74 @@ export const TravelProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     setIsDarkMode((prev) => !prev);
   };
 
+  // Travel Buddy functions
+  const createTravelBuddyRequest = async (params: { tripId: string; requesterId: string; message: string }) => {
+    try {
+      const { data, error } = await supabase
+        .from('travel_buddy_requests')
+        .insert([{
+          trip_id: params.tripId,
+          requester_id: params.requesterId,
+          message: params.message,
+          status: 'pending',
+          created_at: new Date().toISOString()
+        }])
+        .select()
+        .single();
+
+      if (error) throw error;
+
+      // Add to local state
+      setTravelBuddyRequests(prev => [data, ...prev]);
+
+      console.log('Travel buddy request sent successfully:', data);
+    } catch (err: any) {
+      console.error('Error creating travel buddy request:', err);
+      throw err;
+    }
+  };
+
+  const updateTravelBuddyRequest = async (id: string, status: 'accepted' | 'declined') => {
+    try {
+      const { error } = await supabase
+        .from('travel_buddy_requests')
+        .update({ status })
+        .eq('id', id);
+
+      if (error) throw error;
+
+      // Update local state
+      setTravelBuddyRequests(prev => 
+        prev.map(req => req.id === id ? { ...req, status } : req)
+      );
+
+      console.log(`Travel buddy request ${id} ${status}`);
+    } catch (err: any) {
+      console.error('Error updating travel buddy request:', err);
+      throw err;
+    }
+  };
+
+  const getTravelBuddyRequests = async (userId: string) => {
+    try {
+      const { data, error } = await supabase
+        .from('travel_buddy_requests')
+        .select(`
+          *,
+          trip:trips(id, title, destination_summary, start_date, end_date),
+          requester:profiles(name, avatar_url)
+        `)
+        .or(`requester_id.eq.${userId},trip.trips.user_id.eq.${userId}`)
+        .order('created_at', { ascending: false });
+
+      if (error) throw error;
+
+      setTravelBuddyRequests(data || []);
+    } catch (err: any) {
+      console.error('Error fetching travel buddy requests:', err);
+    }
+  };
+
   const value: TravelContextValue = useMemo(
     () => ({
       user,
@@ -979,6 +1073,7 @@ export const TravelProvider: React.FC<{ children: React.ReactNode }> = ({ childr
       reviews,
       tripComments,
       notifications,
+      travelBuddyRequests,
       isLoading,
       isAuthLoading,
       error,
@@ -1006,6 +1101,11 @@ export const TravelProvider: React.FC<{ children: React.ReactNode }> = ({ childr
       markNotificationAsRead,
       markAllNotificationsAsRead,
       
+      // Travel Buddy functions
+      createTravelBuddyRequest,
+      updateTravelBuddyRequest,
+      getTravelBuddyRequests,
+      
       // Currency functions
       convertCurrency: (amount: number, fromCurrency: string = 'USD') => {
         const userCurrency = getUserCurrency();
@@ -1015,7 +1115,7 @@ export const TravelProvider: React.FC<{ children: React.ReactNode }> = ({ childr
       formatCurrency,
       getUserCurrency,
     }),
-    [user, trips, locations, reviews, tripComments, notifications, isLoading, isAuthLoading, error, savedTripIds, followedUserIds]
+    [user, trips, locations, reviews, tripComments, notifications, travelBuddyRequests, isLoading, isAuthLoading, error, savedTripIds, followedUserIds]
   );
 
   return <TravelContext.Provider value={value}>{children}</TravelContext.Provider>;

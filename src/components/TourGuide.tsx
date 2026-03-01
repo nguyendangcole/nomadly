@@ -77,14 +77,30 @@ const TourGuide: React.FC = () => {
 
   useEffect(() => {
     // Only show tour if user is logged in
-    if (!user) return;
+    if (!user) {
+      console.log('[TourGuide] User not logged in, skipping tour');
+      return;
+    }
     
     // Check if it's user's first visit
     const hasSeenTour = localStorage.getItem('nomadly:hasSeenTour');
+    console.log('[TourGuide] Debug:', { 
+      userId: user.id, 
+      userEmail: user.email,
+      hasSeenTour, 
+      isFirstVisit: !hasSeenTour 
+    });
+    
     if (!hasSeenTour) {
       setIsFirstVisit(true);
+      console.log('[TourGuide] Starting tour for new user...');
       // Show tour after a short delay to let page load
-      setTimeout(() => setIsActive(true), 1500);
+      setTimeout(() => {
+        console.log('[TourGuide] Setting isActive to true');
+        setIsActive(true);
+      }, 1500);
+    } else {
+      console.log('[TourGuide] User has already seen tour');
     }
   }, [user]);
 
@@ -141,10 +157,17 @@ const TourGuide: React.FC = () => {
   }, [currentStep, isActive]);
 
   // Don't render if user is not logged in
-  if (!user) return null;
+  if (!user) {
+    console.log('[TourGuide] Not rendering: User not logged in');
+    return null;
+  }
   
-  if (!isActive) return null;
+  if (!isActive) {
+    console.log('[TourGuide] Not rendering: Tour not active');
+    return null;
+  }
 
+  console.log('[TourGuide] Rendering tour component, step:', currentStep);
   const currentTourStep = tourSteps[currentStep];
 
   return (

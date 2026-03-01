@@ -9,6 +9,7 @@ import NotificationsDropdown from './NotificationsDropdown';
 export default function Explore() {
   const { user, trips, locations, reviews, isLoading, error, savedTripIds, saveTrip, unsaveTrip, followedUserIds, followUser, unfollowUser, toggleTripLike } = useTravel();
   const navigate = useNavigate();
+  console.log('[Explore] Component rendering, user:', !!user, 'trips count:', trips.length);
   const [authModal, setAuthModal] = useState({ isOpen: false, message: '' });
   const [search, setSearch] = useState('');
   const [activeFilter, setActiveFilter] = useState('All');
@@ -175,7 +176,9 @@ export default function Explore() {
                 No trips found matching your criteria.
               </div>
             ) : (
-              publicTrips.map((trip, index) => (
+              publicTrips.map((trip, index) => {
+                console.log('[Explore] Rendering trip:', trip.id, 'user logged in:', !!user);
+                return (
                 <div key={trip.id} className="masonry-item group cursor-pointer">
                   <div className="block relative overflow-hidden rounded-3xl bg-slate-200 dark:bg-slate-800 dark:border-slate-800 y2k-card dark:shadow-[4px_4px_0_#fff]">
                     {index === 0 && ( /* Mark the #1 trip as trending */
@@ -255,10 +258,12 @@ export default function Explore() {
                             onClick={(e) => {
                               e.preventDefault();
                               e.stopPropagation();
+                              console.log('[Travel Buddy] Button clicked, user:', !!user);
                               if (!user) {
                                 setAuthModal({ isOpen: true, message: 'Please log in to invite travel buddies!' });
                                 return;
                               }
+                              console.log('[Travel Buddy] Opening modal for trip:', trip.id);
                               setSelectedTrip(trip);
                               setShowBuddyModal(true);
                             }}
@@ -272,7 +277,8 @@ export default function Explore() {
                     </div>
                   </div>
                 </div>
-              ))
+                );
+              })
             )}
           </div>
 

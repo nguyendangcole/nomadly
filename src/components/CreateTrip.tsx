@@ -19,6 +19,15 @@ export default function CreateTrip() {
 
   const [step, setStep] = useState(1);
 
+  // Budget filter options
+  const budgetOptions = [
+    { label: 'Budget Friendly', value: 500, description: 'Under $500' },
+    { label: 'Mid-Range', value: 1500, description: '$500 - $2,000' },
+    { label: 'Comfortable', value: 3000, description: '$2,000 - $4,000' },
+    { label: 'Luxury', value: 5000, description: '$4,000 - $6,000' },
+    { label: 'Ultra Luxury', value: 10000, description: '$6,000+' }
+  ];
+
   // Step 1 State
   const [title, setTitle] = useState('');
   const [startDate, setStartDate] = useState('');
@@ -432,14 +441,40 @@ Return ONLY valid JSON. Make the trip at least 4 locations across the days. Cons
                   />
                 </div>
                 <div>
-                  <label className="block text-xl font-black uppercase mb-2 italic text-[#ff00ff]">Budget ($)</label>
-                  <input
-                    type="number"
-                    className="w-full font-bold border-2 border-black rounded-xl p-4 outline-none focus:ring-4 focus:ring-primary/30"
-                    placeholder="e.g. 1500"
-                    value={budget}
-                    onChange={(e) => setBudget(e.target.value === '' ? '' : Number(e.target.value))}
-                  />
+                  <label className="block text-xl font-black uppercase mb-2 italic text-[#ff00ff]">Budget Range</label>
+                  <div className="space-y-3">
+                    {budgetOptions.map((option) => (
+                      <button
+                        key={option.value}
+                        type="button"
+                        onClick={() => setBudget(option.value)}
+                        className={`w-full p-4 rounded-xl border-2 font-bold transition-all text-left ${
+                          budget === option.value
+                            ? 'bg-primary text-black border-black shadow-[4px_4px_0_#000]'
+                            : 'bg-white border-slate-300 hover:border-black hover:shadow-[2px_2px_0_#000]'
+                        }`}
+                      >
+                        <div className="flex items-center justify-between">
+                          <div>
+                            <div className="font-black text-lg">{option.label}</div>
+                            <div className="text-sm opacity-75">{option.description}</div>
+                          </div>
+                          <div className="text-2xl font-black">
+                            ${option.value.toLocaleString()}
+                          </div>
+                        </div>
+                      </button>
+                    ))}
+                  </div>
+                  <div className="mt-3">
+                    <input
+                      type="number"
+                      className="w-full font-bold border-2 border-black rounded-xl p-3 outline-none focus:ring-4 focus:ring-primary/30"
+                      placeholder="Or enter custom amount..."
+                      value={budget}
+                      onChange={(e) => setBudget(e.target.value === '' ? '' : Number(e.target.value))}
+                    />
+                  </div>
                 </div>
                 <div className="flex flex-col justify-center">
                   <label className="block text-xl font-black uppercase mb-2">Visibility</label>

@@ -35,10 +35,18 @@ public/assets/audio/party-music.mp3
 ## 🎮 How Party Mode Audio Works:
 
 - When you click "Party Mode" → Music starts automatically
-- Music loops continuously for 5 seconds
-- Audio control appears at bottom-right
-- Click ❌ to stop music early
-- Volume is set to 50% by default
+- Music loops continuously for **15 seconds**
+- Audio control appears at bottom-right (🎵 Party!)
+- Click ❌ on the audio control to stop anytime
+- Party Mode auto-stops after 15 seconds if not manually stopped
+
+## 🎛️ Party Mode Features:
+
+- **Duration**: 15 seconds of rainbow effects + music
+- **Manual Stop**: Click 🎵 Party! widget → ❌ to stop early
+- **Visual Effects**: Rainbow animations on entire page
+- **Audio**: Loop music at 50% volume
+- **Control**: Floating widget with stop button
 
 ## 🔧 Troubleshooting:
 
@@ -51,13 +59,18 @@ public/assets/audio/party-music.mp3
 - Compress audio to under 2MB
 - Use shorter loop (15-30 seconds)
 
+**Can't stop Party Mode?**
+- Click the floating 🎵 Party! widget at bottom-right
+- Click the ❌ button to stop immediately
+- Wait 15 seconds for auto-stop
+
 ## 🎨 Pro Tips:
 
-- Choose music with good energy
-- Loop seamlessly if possible
+- Choose music with good energy for 15-second loop
 - Test in different browsers
 - Consider copyright for production use
+- Make sure music loops seamlessly if possible
 
 ---
 
-**🎉 Ready to party! Add your music and let's celebrate!**
+**🎉 Ready to party! Add your music and enjoy 15 seconds of celebration!**

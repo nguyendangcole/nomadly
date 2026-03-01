@@ -137,7 +137,7 @@ export default function Dashboard() {
       action: () => {
         document.body.classList.add('party-mode');
         setPartyModeActive(true);
-        setMagicEffect('🎉 Party Mode Activated!');
+        setMagicEffect('🎉 Party Mode Activated! Click 🎵 to stop');
         
         // Play party music
         const audio = new Audio('/assets/audio/party-music.mp3');
@@ -148,16 +148,18 @@ export default function Dashboard() {
         // Store audio reference to stop later
         (window as any).partyAudio = audio;
         
+        // Auto-stop after 15 seconds (but user can stop anytime)
         setTimeout(() => {
-          document.body.classList.remove('party-mode');
-          setPartyModeActive(false);
-          setMagicEffect('');
-          // Stop music
-          if ((window as any).partyAudio) {
-            (window as any).partyAudio.pause();
-            (window as any).partyAudio = null;
+          if (partyModeActive) { // Only stop if still active
+            document.body.classList.remove('party-mode');
+            setPartyModeActive(false);
+            setMagicEffect('');
+            if ((window as any).partyAudio) {
+              (window as any).partyAudio.pause();
+              (window as any).partyAudio = null;
+            }
           }
-        }, 5000);
+        }, 15000);
       }
     },
     { 

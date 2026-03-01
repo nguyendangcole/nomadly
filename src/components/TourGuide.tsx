@@ -18,6 +18,9 @@ const TourGuide: React.FC = () => {
   const [isFirstVisit, setIsFirstVisit] = useState(false);
   const navigate = useNavigate();
 
+  // ALWAYS log when component mounts
+  console.log('[TourGuide] Component mounted, user:', user ? 'LOGGED_IN' : 'NOT_LOGGED_IN');
+
   const tourSteps: TourStep[] = [
     {
       id: 'welcome',
@@ -162,8 +165,16 @@ const TourGuide: React.FC = () => {
     return null;
   }
   
+  // TEMPORARY: Always show tour for logged-in users for testing
+  console.log('[TourGuide] User is logged in, checking tour state...');
+  
   if (!isActive) {
     console.log('[TourGuide] Not rendering: Tour not active');
+    // TEMPORARY: Auto-activate tour for testing
+    setTimeout(() => {
+      console.log('[TourGuide] AUTO-ACTIVATING TOUR FOR TESTING');
+      setIsActive(true);
+    }, 2000);
     return null;
   }
 

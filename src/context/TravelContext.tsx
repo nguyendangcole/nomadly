@@ -658,7 +658,7 @@ export const TravelProvider: React.FC<{ children: React.ReactNode }> = ({ childr
       const { data, error } = await supabase.auth.signInWithOAuth({
         provider: 'google',
         options: {
-          redirectTo: window.location.origin + '/explore'
+          redirectTo: window.location.origin + '/dashboard'
         }
       });
       if (error) throw error;

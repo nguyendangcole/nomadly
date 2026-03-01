@@ -6,7 +6,7 @@ import NotificationsDropdown from './NotificationsDropdown';
 import TourGuide from './TourGuide';
 
 export default function Dashboard() {
-  const { user, trips, locations, reviews, followedUserIds, deleteTrip, toggleTripLike, savedTripIds } = useTravel();
+  const { user, trips, locations, reviews, followedUserIds, deleteTrip, toggleTripLike, savedTripIds, createTrip } = useTravel();
   const navigate = useNavigate();
 
   const myDashboardTrips = useMemo(() => {
@@ -123,12 +123,64 @@ export default function Dashboard() {
     },
     { 
       icon: 'casino', 
-      label: 'Random Trip', 
-      action: () => {
-        const randomDestinations = ['Tokyo', 'Paris', 'Bali', 'New York', 'Barcelona', 'Dubai', 'Singapore', 'London'];
-        const randomDestination = randomDestinations[Math.floor(Math.random() * randomDestinations.length)];
-        setMagicEffect(`🎲 Random Destination: ${randomDestination}!`);
-        setTimeout(() => setMagicEffect(''), 3000);
+      label: 'AI Trip Generator', 
+      action: async () => {
+        setMagicEffect('🤖 AI is creating your perfect trip...');
+        
+        try {
+          const destinations = [
+            { name: 'Tokyo', country: 'Japan', description: 'Experience neon-lit streets, ancient temples, and cutting-edge technology' },
+            { name: 'Paris', country: 'France', description: 'Romantic cafes, world-class museums, and iconic Eiffel Tower views' },
+            { name: 'Bali', country: 'Indonesia', description: 'Tropical paradise, ancient temples, and stunning beach sunsets' },
+            { name: 'New York', country: 'USA', description: 'Broadway shows, Central Park, and endless dining adventures' },
+            { name: 'Barcelona', country: 'Spain', description: 'Gaudi architecture, tapas culture, and Mediterranean beaches' },
+            { name: 'Dubai', country: 'UAE', description: 'Luxury shopping, desert safaris, and futuristic skyscrapers' },
+            { name: 'Singapore', country: 'Singapore', description: 'Hawker centers, Gardens by the Bay, and multicultural experiences' },
+            { name: 'London', country: 'UK', description: 'Royal palaces, world-class museums, and cozy pub culture' }
+          ];
+          
+          const selectedDestination = destinations[Math.floor(Math.random() * destinations.length)];
+          
+          // Generate AI-powered trip content
+          const aiTripData = {
+            title: `${selectedDestination.name} Adventure`,
+            destinationSummary: `Discover the magic of ${selectedDestination.name}, ${selectedDestination.country}`,
+            coverImage: `https://images.unsplash.com/photo-${Math.random().toString(36).substring(0, 8)}?w=800&auto=format&fit=crop`,
+            isPublic: true,
+            days: [
+              {
+                dayNumber: 1,
+                name: `Arrival in ${selectedDestination.name}`,
+                description: `Touch down and explore the vibrant ${selectedDestination.description.toLowerCase()}`,
+                imageUrl: `https://images.unsplash.com/photo-${Math.random().toString(36).substring(0, 8)}?w=600&auto=format&fit=crop`
+              },
+              {
+                dayNumber: 2,
+                name: `Cultural Immersion`,
+                description: `Deep dive into local culture and authentic experiences`,
+                imageUrl: `https://images.unsplash.com/photo-${Math.random().toString(36).substring(0, 8)}?w=600&auto=format&fit=crop`
+              },
+              {
+                dayNumber: 3,
+                name: `Hidden Gems & Adventure`,
+                description: `Explore off-the-beaten-path locations and create unforgettable memories`,
+                imageUrl: `https://images.unsplash.com/photo-${Math.random().toString(36).substring(0, 8)}?w=600&auto=format&fit=crop`
+              }
+            ],
+            budget: Math.floor(Math.random() * 2000) + 1000 // $1000-3000
+          };
+          
+          // Create the trip using the existing createTrip function
+          await createTrip(aiTripData);
+          
+          setMagicEffect(`✨ AI Trip "${aiTripData.title}" created successfully!`);
+          setTimeout(() => setMagicEffect(''), 3000);
+          
+        } catch (error) {
+          console.error('AI Trip creation failed:', error);
+          setMagicEffect('❌ AI Trip creation failed. Please try again.');
+          setTimeout(() => setMagicEffect(''), 3000);
+        }
       }
     },
     { 

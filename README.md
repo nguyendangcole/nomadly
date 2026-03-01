@@ -199,6 +199,17 @@ VITE_ENABLE_TOUR_GUIDE=true
    - `update_schema.sql`
    - `seed_data.sql` (optional, for demo data)
 
+3. **Configure OAuth Redirect URLs** (for Google login):
+   - Go to Supabase Dashboard → Authentication → URL Configuration
+   - Add your Vercel domain to **Redirect URLs**:
+     ```
+     https://your-vercel-app.vercel.app/dashboard
+     ```
+   - Add local development URL:
+     ```
+     http://localhost:5173/dashboard
+     ```
+
 ## 🏗️ Architecture
 
 ### Technology Stack

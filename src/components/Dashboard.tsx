@@ -79,7 +79,76 @@ export default function Dashboard() {
   const [currentActivityIndex, setCurrentActivityIndex] = useState(0);
   const [suggestionIdx, setSuggestionIdx] = useState(0);
   const [copiedCode, setCopiedCode] = useState<string | null>(null);
-  const [showProModal, setShowProModal] = useState(false);
+  const [showMagicModal, setShowMagicModal] = useState(false);
+  const [magicEffect, setMagicEffect] = useState('');
+
+  const magicActions = [
+    { 
+      icon: 'auto_awesome', 
+      label: 'Start Tour', 
+      action: () => {
+        localStorage.removeItem('nomadly:hasSeenTour');
+        window.location.reload();
+      }
+    },
+    { 
+      icon: 'casino', 
+      label: 'Random Trip', 
+      action: () => {
+        const randomDestinations = ['Tokyo', 'Paris', 'Bali', 'New York', 'Barcelona', 'Dubai', 'Singapore', 'London'];
+        const randomDestination = randomDestinations[Math.floor(Math.random() * randomDestinations.length)];
+        setMagicEffect(`🎲 Random Destination: ${randomDestination}!`);
+        setTimeout(() => setMagicEffect(''), 3000);
+      }
+    },
+    { 
+      icon: 'celebration', 
+      label: 'Party Mode', 
+      action: () => {
+        document.body.classList.add('party-mode');
+        setMagicEffect('🎉 Party Mode Activated!');
+        setTimeout(() => {
+          document.body.classList.remove('party-mode');
+          setMagicEffect('');
+        }, 5000);
+      }
+    },
+    { 
+      icon: 'emoji_objects', 
+      label: 'Travel Tip', 
+      action: () => {
+        const tips = [
+          'Pack light, travel heavy on experiences!',
+          'Always try the local street food 🍜',
+          'Learn basic phrases in the local language',
+          'Take photos, but also live in the moment',
+          'Keep copies of important documents',
+          'Stay hydrated, especially on flights',
+          'Embrace unexpected adventures!',
+          'Talk to locals - they know the best spots'
+        ];
+        const randomTip = tips[Math.floor(Math.random() * tips.length)];
+        setMagicEffect(`💡 Tip: ${randomTip}`);
+        setTimeout(() => setMagicEffect(''), 4000);
+      }
+    },
+    { 
+      icon: 'rocket_launch', 
+      label: 'Quick Escape', 
+      action: () => {
+        setMagicEffect('🚀 Teleporting to Explore...');
+        setTimeout(() => navigate('/explore'), 1000);
+      }
+    },
+    { 
+      icon: 'local_cafe', 
+      label: 'Coffee Break', 
+      action: () => {
+        setMagicEffect('☕ Time for a virtual coffee break!');
+        setTimeout(() => setMagicEffect(''), 3000);
+      }
+    }
+  ];
 
   const SUGGESTIONS = useMemo(() => [
     {
@@ -150,15 +219,13 @@ export default function Dashboard() {
           </div>
           <div className="flex items-center gap-4 ml-auto">
             <button
-              onClick={() => {
-                localStorage.removeItem('nomadly:hasSeenTour');
-                window.location.reload();
-              }}
-              className="bg-y2k-pink text-black px-4 py-2 rounded-full text-sm font-black uppercase italic flex items-center gap-2 hover:scale-105 transition-transform border-2 border-black"
-              title="Start Tour Guide"
+              onClick={() => setShowMagicModal(true)}
+              className="bg-y2k-pink text-black px-4 py-2 rounded-full text-sm font-black uppercase italic flex items-center gap-2 hover:scale-105 transition-transform border-2 border-black relative group"
+              title="Magic Menu - Try something fun!"
             >
-              <span className="material-symbols-outlined text-sm">tour</span>
-              Tour
+              <span className="material-symbols-outlined text-sm group-hover:rotate-12 transition-transform">auto_awesome</span>
+              Magic
+              <span className="absolute -top-1 -right-1 w-2 h-2 bg-y2k-yellow rounded-full animate-pulse"></span>
             </button>
             <NotificationsDropdown />
             {user?.isAdmin && (
@@ -569,7 +636,88 @@ export default function Dashboard() {
             </div>
           </div>
         )}
+
+        {/* Magic Modal */}
+        {showMagicModal && (
+          <div
+            className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm"
+            onClick={() => setShowMagicModal(false)}
+          >
+            <div
+              className="bg-white dark:bg-slate-900 border-4 border-black dark:border-white max-w-md w-full p-6 relative rounded-2xl shadow-[8px_8px_0_#000] dark:shadow-[8px_8px_0_#fff]"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <button
+                onClick={(e) => { e.stopPropagation(); setShowMagicModal(false); }}
+                className="absolute top-4 right-4 w-8 h-8 flex items-center justify-center bg-black text-white rounded-full hover:bg-white hover:text-black border-2 border-white transition-all hover:scale-110 z-50 cursor-pointer"
+              >
+                <span className="material-symbols-outlined font-black text-sm">close</span>
+              </button>
+
+              <div className="text-center mb-6">
+                <h2 className="text-2xl font-black italic uppercase mb-2 text-black dark:text-white">✨ Magic Menu</h2>
+                <p className="text-slate-600 dark:text-slate-400 font-bold">Try something fun and random!</p>
+              </div>
+
+              <div className="grid grid-cols-2 gap-3">
+                {magicActions.map((action, index) => (
+                  <button
+                    key={index}
+                    onClick={() => {
+                      action.action();
+                      setShowMagicModal(false);
+                    }}
+                    className="p-4 rounded-xl border-2 border-black dark:border-white hover:bg-primary hover:scale-105 transition-all group"
+                  >
+                    <span className="material-symbols-outlined text-2xl mb-2 block group-hover:rotate-12 transition-transform">
+                      {action.icon}
+                    </span>
+                    <div className="text-sm font-black text-black dark:text-white">
+                      {action.label}
+                    </div>
+                  </button>
+                ))}
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Magic Effect Notification */}
+        {magicEffect && (
+          <div className="fixed top-20 left-1/2 -translate-x-1/2 z-[90] bg-y2k-pink text-black px-6 py-3 rounded-full border-2 border-black shadow-[4px_4px_0_#000] font-black animate-bounce">
+            {magicEffect}
+          </div>
+        )}
       </main >
     </div >
   );
+}
+
+// Add party mode styles
+const partyModeStyles = `
+  .party-mode {
+    animation: partyRainbow 3s linear infinite;
+  }
+  
+  @keyframes partyRainbow {
+    0% { filter: hue-rotate(0deg) saturate(1.5); }
+    25% { filter: hue-rotate(90deg) saturate(1.5); }
+    50% { filter: hue-rotate(180deg) saturate(1.5); }
+    75% { filter: hue-rotate(270deg) saturate(1.5); }
+    100% { filter: hue-rotate(360deg) saturate(1.5); }
+  }
+  
+  .party-mode * {
+    animation-duration: 0.5s !important;
+  }
+`;
+
+// Inject styles into head
+if (typeof document !== 'undefined') {
+  const styleSheet = document.createElement('style');
+  styleSheet.textContent = partyModeStyles;
+  if (!document.head.querySelector('style[data-party-mode]')) {
+    styleSheet.setAttribute('data-party-mode', 'true');
+    document.head.appendChild(styleSheet);
+  }
 }

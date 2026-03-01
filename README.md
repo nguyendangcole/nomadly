@@ -40,6 +40,32 @@
 - 🖼️ **Beautiful image galleries** for each trip
 - 📝 **Rich text descriptions** and travel notes
 - 🔄 **Edit and update** trips anytime
+- 💰 **Budget tracking** with expense management
+- 🎯 **Budget presets** for quick planning
+
+### 👥 **Travel Buddy Matching** 🆕
+- 🤝 **Find travel companions** for your trips
+- 📤 **Send buddy requests** with personalized messages
+- 📬 **Public request display** like comments
+- ✅ **Accept/Decline** requests as trip owner
+- 🗑️ **Delete your own requests** anytime
+- 🎨 **Beautiful popup notifications** instead of alerts
+- 👀 **View all requests** in trip details
+- 🔔 **Real-time updates** for request status
+
+### 🎉 **Party Mode & Magic Features** 🆕
+- 🎵 **Background music** with 15-second loops
+- 🎊 **Visual effects** and animations
+- ⏹️ **Manual stop controls** for Party Mode
+- 🪄 **Magic Button** for fun surprises
+- 🌈 **Interactive animations** and transitions
+
+### 🧭 **Tour Guide System** 🆕
+- 📚 **Interactive onboarding** for new users
+- 🎯 **Step-by-step guidance** through features
+- 💡 **Smart tooltips** and hints
+- 🔄 **One-time display** with localStorage
+- 🎪 **Y2K-themed** tour experience
 
 ### 👤 **User Profiles**
 - 🎨 **Customizable profiles** with avatar, name, and bio
@@ -55,6 +81,8 @@
 - 🔍 **Search and filter** trips by destination, tags
 - 🎯 **Curated recommendations** and travel suggestions
 - 📈 **Trending trips** and popular destinations
+- 👥 **Travel Buddy buttons** on trip cards
+- 📝 **Public travel buddy requests** display
 
 ### 🌐 **Social Features**
 - 👥 **Follow/unfollow** other travelers
@@ -62,6 +90,8 @@
 - 🔔 **Notification system** for follows and interactions
 - 📊 **Activity feed** showing friends' travel updates
 - 🤝 **Connect with like-minded** travelers
+- 💬 **Trip comments** and discussions
+- 🎯 **Travel buddy matching** system
 
 ### 🎨 **User Experience**
 - 🌙 **Dark mode support** throughout the app
@@ -70,6 +100,8 @@
 - 🎯 **Intuitive navigation** and user-friendly interface
 - ♿ **Accessibility features** and semantic HTML
 - 🔄 **Real-time updates** without page refresh
+- 🎨 **Y2K aesthetic** with bold colors and animations
+- 🪄 **Beautiful popup notifications** system
 
 ### 🛠️ **Technical Features**
 - 🔐 **Secure authentication** with Supabase Auth
@@ -78,6 +110,8 @@
 - 🔒 **Environment variable** protection
 - 🚀 **Optimized build** with Vite
 - 📦 **Component-based** architecture
+- 🎯 **TypeScript** for type safety
+- 🔄 **No lazy loading** for immediate content access
 
 ## 🚀 Quick Start
 
@@ -110,12 +144,19 @@
    VITE_SUPABASE_ANON_KEY=your_supabase_anon_key
    ```
 
-4. **Run the development server**
+4. **Set up database**
+   ```bash
+   # Run SQL schemas in Supabase Dashboard
+   # 1. Run database/travel_buddy_requests.sql
+   # 2. Run other schema files as needed
+   ```
+
+5. **Run the development server**
    ```bash
    npm run dev
    ```
 
-5. **Open your browser**
+6. **Open your browser**
    Navigate to `http://localhost:5173`
 
 ## ⚙️ Configuration
@@ -137,12 +178,16 @@ VITE_APP_URL=http://localhost:5173
 VITE_ENABLE_SOCIAL_FEATURES=true
 VITE_ENABLE_REVIEWS=true
 VITE_ENABLE_NOTIFICATIONS=true
+VITE_ENABLE_TRAVEL_BUDDY=true
+VITE_ENABLE_PARTY_MODE=true
+VITE_ENABLE_TOUR_GUIDE=true
 ```
 
 ### Database Setup
 
 1. **Create a Supabase project** at [supabase.com](https://supabase.com)
 2. **Run the SQL schemas** in the following order:
+   - `database/travel_buddy_requests.sql` (NEW - Travel Buddy system)
    - `enable_public_read.sql`
    - `update_schema.sql`
    - `seed_data.sql` (optional, for demo data)
@@ -186,7 +231,8 @@ VITE_ENABLE_NOTIFICATIONS=true
 nomadly/
 ├── public/                 # Static assets
 │   └── assets/
-│       └── branding/      # Logos and brand assets
+│       ├── branding/      # Logos and brand assets
+│       └── audio/         # Party mode music files
 ├── src/
 │   ├── components/        # React components
 │   │   ├── Auth.tsx       # Authentication forms
@@ -194,12 +240,18 @@ nomadly/
 │   │   ├── Explore.tsx    # Trip discovery
 │   │   ├── UserProfile.tsx # User profiles
 │   │   ├── Settings.tsx   # User settings
+│   │   ├── TravelBuddyDialog.tsx # 🆕 Travel buddy requests
+│   │   ├── PublicTravelBuddyRequests.tsx # 🆕 Public requests display
+│   │   ├── NotificationPopup.tsx # 🆕 Beautiful notifications
+│   │   ├── TourGuide.tsx  # 🆕 Interactive onboarding
 │   │   └── ...
 │   ├── context/           # React Context
 │   │   └── TravelContext.tsx # Global state management
 │   ├── lib/               # Utilities
 │   │   └── supabase.ts    # Supabase client
 │   └── types/             # TypeScript definitions
+├── database/              # 🆕 Database schemas
+│   └── travel_buddy_requests.sql # Travel buddy system
 ├── *.sql                  # Database schemas
 ├── .env.example           # Environment template
 └── README.md              # This file
@@ -210,19 +262,27 @@ nomadly/
 ### Core Components
 
 - **`UserProfile`**: Display and edit user profiles
-- **`TripCard`**: Show trip previews in grid layout
-- **`Itinerary`**: Detailed trip view with day-by-day breakdown
+- **`TripCard`**: Show trip previews with Travel Buddy buttons
+- **`Itinerary`**: Detailed trip view with Travel Buddy requests
 - **`Explore`**: Browse and discover community trips
-- **`Dashboard`**: Personal homepage with activity feed
+- **`Dashboard`**: Personal homepage with Party Mode
 - **`Settings`**: User preferences and profile editing
+
+### New Components 🆕
+
+- **`TravelBuddyDialog`**: Send travel buddy requests
+- **`PublicTravelBuddyRequests`**: Display public requests like comments
+- **`NotificationPopup`**: Beautiful notification system
+- **`TourGuide`**: Interactive onboarding experience
 
 ### Design System
 
-- **Colors**: Primary (green), Black/White contrast, Accent colors
+- **Colors**: Y2K aesthetic with pink, yellow, primary colors
 - **Typography**: Bold, playful fonts with Y2K aesthetic
-- **Layout**: Card-based design with rounded corners
-- **Animations**: Smooth transitions and micro-interactions
+- **Layout**: Card-based design with rounded corners and borders
+- **Animations**: Smooth transitions, hover effects, and micro-interactions
 - **Responsive**: Mobile-first approach
+- **Y2K Elements**: Bold borders, dramatic shadows, vibrant colors
 
 ## 🔐 Authentication
 
@@ -232,6 +292,7 @@ nomadly/
 - **Session persistence** with secure tokens
 - **Protected routes** with authentication guards
 - **User profile creation** on first login
+- **Tour Guide** for new user onboarding
 
 ### Security
 - **Environment variables** protected with .gitignore
@@ -256,6 +317,16 @@ locations (id, trip_id, day_number, name, description, image_url)
 -- Social Features
 reviews (id, user_id, location_id, rating, comment, created_at)
 notifications (id, user_id, actor_id, type, is_read, created_at)
+
+-- 🆕 Travel Buddy System
+travel_buddy_requests (
+  id UUID PRIMARY KEY,
+  trip_id UUID REFERENCES trips(id),
+  requester_id UUID REFERENCES profiles(id),
+  message TEXT,
+  status TEXT DEFAULT 'pending',
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+)
 ```
 
 ### Relationships
@@ -263,6 +334,8 @@ notifications (id, user_id, actor_id, type, is_read, created_at)
 - `trips` ← `locations` (one-to-many)
 - `profiles` ← `reviews` (one-to-many)
 - `profiles` ← `notifications` (many-to-many)
+- `profiles` ← `travel_buddy_requests` (one-to-many)
+- `trips` ← `travel_buddy_requests` (one-to-many)
 
 ## 🌐 Deployment
 
@@ -342,4 +415,6 @@ If you have any questions or need help:
 <div align="center">
   <p>Made with ❤️ by the travel community</p>
   <p>🌍 Start your journey with Nomadly today!</p>
+  <p>👥 Find your perfect travel buddy!</p>
+  <p>🎉 Experience the Party Mode!</p>
 </div>

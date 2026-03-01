@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useTravel } from '../context/TravelContext';
 
 interface TourStep {
   id: string;
@@ -11,6 +12,7 @@ interface TourStep {
 }
 
 const TourGuide: React.FC = () => {
+  const { user } = useTravel();
   const [isActive, setIsActive] = useState(false);
   const [currentStep, setCurrentStep] = useState(0);
   const [isFirstVisit, setIsFirstVisit] = useState(false);
@@ -19,62 +21,64 @@ const TourGuide: React.FC = () => {
   const tourSteps: TourStep[] = [
     {
       id: 'welcome',
-      title: '🎉 Chào mừng đến với Nomadly!',
-      content: 'Đây là platform giúp bạn lập kế hoạch chuyến đi, chia sẻ trải nghiệm và kết nối với những người du lịch khác. Hãy cùng khám phá nhé!',
+      title: '🎉 Welcome to Nomadly!',
+      content: 'This is your travel planning platform where you can create trips, share experiences, and connect with fellow travelers worldwide. Let\'s explore together!',
       position: 'center'
     },
     {
       id: 'dashboard',
-      title: '📊 Dashboard của bạn',
-      content: 'Đây là trung tâm điều khiển của bạn. Bạn sẽ thấy các chuyến sắp tới, hoạt động gần đây và các gợi ý du lịch được cá nhân hóa.',
+      title: '📊 Your Dashboard',
+      content: 'This is your command center. Here you\'ll see upcoming trips, recent activity, and personalized travel recommendations to inspire your next adventure.',
       target: '.dashboard-overview',
       position: 'bottom'
     },
     {
       id: 'create-trip',
-      title: '✨ Tạo chuyến đi mới',
-      content: 'Bắt đầu lập kế hoạch cho chuyến đi mơ ước của bạn! Thêm điểm đến, lịch trình và hình ảnh để tạo nên một hành trình难忘.',
+      title: '✨ Create New Trip',
+      content: 'Start planning your dream trip! Add destinations, itineraries, and photos to create an unforgettable travel journey that you can share with others.',
       target: '.create-trip-btn',
       position: 'bottom',
       action: () => navigate('/create-trip')
     },
     {
       id: 'explore',
-      title: '🔍 Khám phá cộng đồng',
-      content: 'Tìm kiếm các chuyến đi từ cộng đồng, lấy cảm hứng từ những người du lịch khác và lưu lại những chuyến đi bạn yêu thích.',
+      title: '🔍 Explore Community',
+      content: 'Discover amazing trips from our community, get inspired by other travelers\' experiences, and save your favorite trips for future reference.',
       target: '.explore-link',
       position: 'bottom',
       action: () => navigate('/explore')
     },
     {
       id: 'profile',
-      title: '👤 Hồ sơ cá nhân',
-      content: 'Tùy chỉnh hồ sơ của bạn, thêm ảnh đại diện, bio và kết nối với những người du lịch khác theo dõi hành trình của bạn.',
+      title: '👤 Your Profile',
+      content: 'Customize your profile, add your avatar, write your bio, and connect with other travelers who follow your journeys.',
       target: '.profile-link',
       position: 'bottom',
       action: () => {
-        const user = JSON.parse(localStorage.getItem('nomadly:user') || '{}');
-        if (user.id) {
+        if (user?.id) {
           navigate(`/profile/${user.id}`);
         }
       }
     },
     {
       id: 'social',
-      title: '🌙 Kết nối và chia sẻ',
-      content: 'Theo dõi những người du lịch khác, viết đánh giá, và nhận thông báo về các hoạt động trong cộng đồng.',
+      title: '🌙 Connect & Share',
+      content: 'Follow other travelers, write reviews, and get notifications about community activities. Share your adventures and inspire others!',
       target: '.social-features',
       position: 'top'
     },
     {
       id: 'complete',
-      title: '🎉 Hoàn thành!',
-      content: 'Tuyệt vời! Bạn đã sẵn sàng bắt đầu hành trình của mình với Nomadly. Đừng ngần ngại khám phá tất cả các tính năng và kết nối với cộng đồng du lịch của chúng tôi!',
+      title: '🎉 All Set!',
+      content: 'Awesome! You\'re ready to start your journey with Nomadly. Feel free to explore all features and connect with our amazing travel community!',
       position: 'center'
     }
   ];
 
   useEffect(() => {
+    // Only show tour if user is logged in
+    if (!user) return;
+    
     // Check if it's user's first visit
     const hasSeenTour = localStorage.getItem('nomadly:hasSeenTour');
     if (!hasSeenTour) {
@@ -82,7 +86,7 @@ const TourGuide: React.FC = () => {
       // Show tour after a short delay to let page load
       setTimeout(() => setIsActive(true), 1500);
     }
-  }, []);
+  }, [user]);
 
   const startTour = () => {
     setCurrentStep(0);
@@ -136,6 +140,9 @@ const TourGuide: React.FC = () => {
     }
   }, [currentStep, isActive]);
 
+  // Don't render if user is not logged in
+  if (!user) return null;
+  
   if (!isActive) return null;
 
   const currentTourStep = tourSteps[currentStep];
@@ -187,7 +194,7 @@ const TourGuide: React.FC = () => {
                 : 'bg-slate-200 dark:bg-slate-700 text-slate-700 dark:text-slate-300 hover:bg-slate-300 dark:hover:bg-slate-600'
             }`}
           >
-            ← Trước
+            ← Previous
           </button>
 
           <div className="text-sm text-slate-500 dark:text-slate-400">
@@ -199,13 +206,13 @@ const TourGuide: React.FC = () => {
               onClick={skipTour}
               className="px-4 py-2 rounded-lg font-bold text-sm text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200 transition-colors"
             >
-              Bỏ qua
+              Skip
             </button>
             <button
               onClick={nextStep}
               className="px-4 py-2 bg-primary text-black rounded-lg font-bold text-sm hover:bg-primary/80 transition-colors shadow-[2px_2px_0_#000]"
             >
-              {currentStep === tourSteps.length - 1 ? 'Hoàn thành' : 'Tiếp tục →'}
+              {currentStep === tourSteps.length - 1 ? 'Complete' : 'Next →'}
             </button>
           </div>
         </div>

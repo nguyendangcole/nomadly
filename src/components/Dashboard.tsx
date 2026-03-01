@@ -135,6 +135,7 @@ export default function Dashboard() {
       icon: 'celebration', 
       label: 'Party Mode', 
       action: () => {
+        console.log('[Party Mode] Starting...');
         document.body.classList.add('party-mode');
         setPartyModeActive(true);
         setMagicEffect('🎉 Party Mode Activated! Click 🎵 to stop');
@@ -149,17 +150,20 @@ export default function Dashboard() {
         (window as any).partyAudio = audio;
         
         // Auto-stop after 15 seconds (but user can stop anytime)
-        setTimeout(() => {
-          if (partyModeActive) { // Only stop if still active
-            document.body.classList.remove('party-mode');
-            setPartyModeActive(false);
-            setMagicEffect('');
-            if ((window as any).partyAudio) {
-              (window as any).partyAudio.pause();
-              (window as any).partyAudio = null;
-            }
+        const timeoutId = setTimeout(() => {
+          console.log('[Party Mode] Auto-stop triggered');
+          document.body.classList.remove('party-mode');
+          setPartyModeActive(false);
+          setMagicEffect('');
+          if ((window as any).partyAudio) {
+            (window as any).partyAudio.pause();
+            (window as any).partyAudio = null;
           }
         }, 15000);
+        
+        // Store timeout reference to clear if manually stopped
+        (window as any).partyTimeout = timeoutId;
+        console.log('[Party Mode] Started, widget should show');
       }
     },
     { 
@@ -741,13 +745,22 @@ export default function Dashboard() {
         {/* Party Mode Audio Control */}
         {partyModeActive && (
           <div className="fixed bottom-20 right-6 z-[90] bg-y2k-pink text-black p-3 rounded-full border-2 border-black shadow-[4px_4px_0_#000] flex items-center gap-2 animate-pulse">
-            <span className="material-symbols-outled text-sm">music_note</span>
+            <span className="material-symbols-outlined text-sm">music_note</span>
             <span className="text-xs font-black">Party!</span>
             <button
               onClick={() => {
+                // Clear auto-stop timeout
+                if ((window as any).partyTimeout) {
+                  clearTimeout((window as any).partyTimeout);
+                  (window as any).partyTimeout = null;
+                }
+                
+                // Stop party mode
                 document.body.classList.remove('party-mode');
                 setPartyModeActive(false);
                 setMagicEffect('');
+                
+                // Stop music
                 if ((window as any).partyAudio) {
                   (window as any).partyAudio.pause();
                   (window as any).partyAudio = null;

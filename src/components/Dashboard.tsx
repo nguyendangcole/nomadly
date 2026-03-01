@@ -82,6 +82,34 @@ export default function Dashboard() {
   const [showMagicModal, setShowMagicModal] = useState(false);
   const [magicEffect, setMagicEffect] = useState('');
 
+  // Inject party mode styles safely
+  useEffect(() => {
+    const partyModeStyles = `
+      .party-mode {
+        animation: partyRainbow 3s linear infinite;
+      }
+      
+      @keyframes partyRainbow {
+        0% { filter: hue-rotate(0deg) saturate(1.5); }
+        25% { filter: hue-rotate(90deg) saturate(1.5); }
+        50% { filter: hue-rotate(180deg) saturate(1.5); }
+        75% { filter: hue-rotate(270deg) saturate(1.5); }
+        100% { filter: hue-rotate(360deg) saturate(1.5); }
+      }
+      
+      .party-mode * {
+        animation-duration: 0.5s !important;
+      }
+    `;
+
+    if (typeof document !== 'undefined' && !document.head.querySelector('style[data-party-mode]')) {
+      const styleSheet = document.createElement('style');
+      styleSheet.textContent = partyModeStyles;
+      styleSheet.setAttribute('data-party-mode', 'true');
+      document.head.appendChild(styleSheet);
+    }
+  }, []);
+
   const magicActions = [
     { 
       icon: 'auto_awesome', 
@@ -691,33 +719,4 @@ export default function Dashboard() {
       </main >
     </div >
   );
-}
-
-// Add party mode styles
-const partyModeStyles = `
-  .party-mode {
-    animation: partyRainbow 3s linear infinite;
-  }
-  
-  @keyframes partyRainbow {
-    0% { filter: hue-rotate(0deg) saturate(1.5); }
-    25% { filter: hue-rotate(90deg) saturate(1.5); }
-    50% { filter: hue-rotate(180deg) saturate(1.5); }
-    75% { filter: hue-rotate(270deg) saturate(1.5); }
-    100% { filter: hue-rotate(360deg) saturate(1.5); }
-  }
-  
-  .party-mode * {
-    animation-duration: 0.5s !important;
-  }
-`;
-
-// Inject styles into head
-if (typeof document !== 'undefined') {
-  const styleSheet = document.createElement('style');
-  styleSheet.textContent = partyModeStyles;
-  if (!document.head.querySelector('style[data-party-mode]')) {
-    styleSheet.setAttribute('data-party-mode', 'true');
-    document.head.appendChild(styleSheet);
-  }
 }

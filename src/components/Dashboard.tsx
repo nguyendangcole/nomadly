@@ -82,6 +82,7 @@ export default function Dashboard() {
   const [showMagicModal, setShowMagicModal] = useState(false);
   const [magicEffect, setMagicEffect] = useState('');
   const [showProModal, setShowProModal] = useState(false);
+  const [partyModeActive, setPartyModeActive] = useState(false);
 
   // Inject party mode styles safely
   useEffect(() => {
@@ -135,10 +136,27 @@ export default function Dashboard() {
       label: 'Party Mode', 
       action: () => {
         document.body.classList.add('party-mode');
+        setPartyModeActive(true);
         setMagicEffect('🎉 Party Mode Activated!');
+        
+        // Play party music
+        const audio = new Audio('/assets/audio/party-music.mp3');
+        audio.loop = true;
+        audio.volume = 0.5;
+        audio.play().catch(e => console.log('Audio play failed:', e));
+        
+        // Store audio reference to stop later
+        (window as any).partyAudio = audio;
+        
         setTimeout(() => {
           document.body.classList.remove('party-mode');
+          setPartyModeActive(false);
           setMagicEffect('');
+          // Stop music
+          if ((window as any).partyAudio) {
+            (window as any).partyAudio.pause();
+            (window as any).partyAudio = null;
+          }
         }, 5000);
       }
     },
@@ -715,6 +733,28 @@ export default function Dashboard() {
         {magicEffect && (
           <div className="fixed top-20 left-1/2 -translate-x-1/2 z-[90] bg-y2k-pink text-black px-6 py-3 rounded-full border-2 border-black shadow-[4px_4px_0_#000] font-black animate-bounce">
             {magicEffect}
+          </div>
+        )}
+
+        {/* Party Mode Audio Control */}
+        {partyModeActive && (
+          <div className="fixed bottom-20 right-6 z-[90] bg-y2k-pink text-black p-3 rounded-full border-2 border-black shadow-[4px_4px_0_#000] flex items-center gap-2 animate-pulse">
+            <span className="material-symbols-outled text-sm">music_note</span>
+            <span className="text-xs font-black">Party!</span>
+            <button
+              onClick={() => {
+                document.body.classList.remove('party-mode');
+                setPartyModeActive(false);
+                setMagicEffect('');
+                if ((window as any).partyAudio) {
+                  (window as any).partyAudio.pause();
+                  (window as any).partyAudio = null;
+                }
+              }}
+              className="ml-1 w-5 h-5 bg-black text-white rounded-full flex items-center justify-center hover:bg-white hover:text-black transition-colors"
+            >
+              <span className="material-symbols-outlined text-[10px]">close</span>
+            </button>
           </div>
         )}
       </main >

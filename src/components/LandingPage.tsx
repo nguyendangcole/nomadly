@@ -109,7 +109,11 @@ export default function LandingPage() {
                     {/* Hero Headline */}
                     <h1 className="text-6xl sm:text-7xl md:text-9xl font-black italic uppercase tracking-tighter leading-[0.8] text-slate-900 mb-6 drop-shadow-sm hover:scale-105 transition-transform duration-300">
                         Welcome to <br />
-                        <span className="text-transparent bg-clip-text bg-gradient-to-r from-accent-pink via-primary to-accent-blue filter hue-rotate-15 hover:hue-rotate-45 transition-all duration-500">Nomadly</span>
+                        <img 
+                            src="/assets/branding/logo-wordmark.png" 
+                            alt="Nomadly" 
+                            className="h-20 md:h-32 lg:h-40 hover:scale-105 transition-transform duration-500 filter hue-rotate-15 hover:hue-rotate-45"
+                        />
                     </h1>
 
                     <p className="text-xl md:text-2xl font-bold text-slate-600 max-w-2xl mb-12 leading-snug hover:text-slate-700 transition-colors duration-300">
@@ -120,7 +124,11 @@ export default function LandingPage() {
                     <div className="flex flex-col sm:flex-row gap-6 items-center">
                         <Link to="/dashboard" className="w-full sm:w-auto peer">
                             <button className="w-full glossy-green text-black px-12 py-6 rounded-full text-2xl font-black uppercase italic tracking-wider flex items-center justify-center gap-3 hover:scale-110 active:scale-95 transition-all duration-300 shadow-[0_8px_0_0_#000] active:shadow-[0_0px_0_0_#000] active:translate-y-2 border-4 border-black hover:shadow-[0_12px_0_0_#000] hover:-translate-y-1">
-                                <span className="material-symbols-outlined text-3xl animate-pulse">rocket_launch</span>
+                                <img 
+                                    src="/assets/branding/logo-wordmark.png" 
+                                    alt="Nomadly" 
+                                    className="h-8 w-auto animate-pulse"
+                                />
                                 Enter Website
                             </button>
                         </Link>
@@ -148,7 +156,11 @@ export default function LandingPage() {
             <section className="py-24 px-6 md:px-12 max-w-7xl mx-auto z-20 relative">
                 <div className="text-center mb-16 animate-in fade-in duration-700">
                     <div className="inline-flex items-center gap-2 px-6 py-2 rounded-full bg-y2k-pink text-black font-black uppercase tracking-widest text-sm mb-6 shadow-[4px_4px_0_#000] hover:scale-105 transition-transform duration-300">
-                        <span className="material-symbols-outlined animate-pulse">group_add</span>
+                        <img 
+                            src="/assets/branding/logo-wordmark.png" 
+                            alt="Nomadly" 
+                            className="h-5 w-auto animate-pulse"
+                        />
                         Find Your Travel Buddy
                     </div>
                     <h2 className="text-5xl md:text-7xl font-black uppercase italic tracking-tighter mb-6">
@@ -202,7 +214,11 @@ export default function LandingPage() {
 
                 <div className="text-center">
                     <Link to="/explore" className="inline-flex items-center gap-3 bg-y2k-pink text-black px-8 py-4 rounded-full font-black uppercase tracking-wider text-lg border-4 border-black shadow-[6px_6px_0_#000] hover:scale-110 hover:shadow-[8px_8px_0_#000] hover:-translate-y-1 transition-all duration-300">
-                        <span className="material-symbols-outlined">explore</span>
+                        <img 
+                            src="/assets/branding/logo-wordmark.png" 
+                            alt="Nomadly" 
+                            className="h-6 w-auto"
+                        />
                         Find Travel Buddies Now
                     </Link>
                 </div>

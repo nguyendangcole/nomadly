@@ -186,11 +186,13 @@ export default function Itinerary() {
   return (
     <div className="min-h-screen bg-white font-display">
       <header className="flex items-center justify-between border-b border-slate-200 px-6 md:px-20 py-4 bg-white sticky top-0 z-50">
-        <Link to="/dashboard" className="flex items-center gap-4">
-          <div className="size-10 bg-primary rounded-full flex items-center justify-center text-black border-2 border-black shadow-[3px_3px_0px_#000]">
-            <span className="material-symbols-outlined">map</span>
-          </div>
-          <h2 className="text-xl font-bold tracking-tight">Triply</h2>
+        <Link to="/dashboard" className="flex items-center gap-3 font-bold text-xl text-black dark:text-white hover:text-primary transition-colors">
+          <img 
+            src="/assets/branding/logo-wordmark.png" 
+            alt="Nomadly" 
+            className="h-8 w-auto"
+          />
+          <h2 className="text-xl font-bold tracking-tight">Nomadly</h2>
         </Link>
         <div className="flex items-center gap-4">
           <NotificationsDropdown />

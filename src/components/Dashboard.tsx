@@ -81,6 +81,7 @@ export default function Dashboard() {
   const [copiedCode, setCopiedCode] = useState<string | null>(null);
   const [showMagicModal, setShowMagicModal] = useState(false);
   const [magicEffect, setMagicEffect] = useState('');
+  const [showProModal, setShowProModal] = useState(false);
 
   // Inject party mode styles safely
   useEffect(() => {

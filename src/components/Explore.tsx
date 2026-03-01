@@ -79,7 +79,12 @@ export default function Explore() {
           </div>
           <div className="flex items-center gap-4 ml-auto">
             <NotificationsDropdown />
-            <button className="glossy-green text-black dark:border-white px-6 py-2 rounded-full text-sm font-black uppercase italic flex items-center gap-2 hover:scale-105 transition-transform">
+            <button 
+              onClick={() => {
+                alert('🚀 Pro features coming soon! \n\nFuture Pro benefits:\n• Unlimited AI trip generation\n• Advanced travel analytics\n• Priority support\n• Exclusive trip templates\n• Ad-free experience\n\nFor now, enjoy all free features! 🎉');
+              }}
+              className="glossy-green text-black dark:border-white px-6 py-2 rounded-full text-sm font-black uppercase italic flex items-center gap-2 hover:scale-105 transition-transform"
+            >
               <span className="material-symbols-outlined text-sm">upgrade</span>
               Go Pro
             </button>

@@ -4,12 +4,19 @@
   <h1>🌍 Nomadly - Smart Travel Planning Platform</h1>
   
   <p>
-    <strong>Plan trips, share experiences, and connect with fellow travelers worldwide</strong>
+    <strong>Plan trips, share experiences, find travel buddies, and connect with fellow travelers worldwide</strong>
   </p>
   
   <p>
     Built with React, TypeScript, Supabase, and modern web technologies
   </p>
+  
+  <!-- 🚀 Live Deploy Link -->
+  <div>
+    <a href="https://nomadly-virid.vercel.app" target="_blank" rel="noopener noreferrer">
+      <img src="https://img.shields.io/badge/Live%20Demo-nomadly--virid.vercel.app-brightgreen?style=for-the-badge&logo=vercel&logoColor=white" alt="Live Demo" />
+    </a>
+  </div>
   
   [![React](https://img.shields.io/badge/React-18.2.0-blue.svg)](https://reactjs.org/)
   [![TypeScript](https://img.shields.io/badge/TypeScript-5.0.0-blue.svg)](https://www.typescriptlang.org/)

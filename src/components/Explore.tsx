@@ -1,7 +1,7 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useTravel } from '../context/TravelContext';
-import TravelBuddyModal from './TravelBuddyModal';
+import TravelBuddyDialog from './TravelBuddyDialog';
 import Sidebar from './Sidebar';
 import AuthModal from './AuthModal';
 import NotificationsDropdown from './NotificationsDropdown';
@@ -15,6 +15,7 @@ export default function Explore() {
   const [activeFilter, setActiveFilter] = useState('All');
   const [showBuddyModal, setShowBuddyModal] = useState(false);
   const [selectedTrip, setSelectedTrip] = useState(null);
+  const [showBuddyDialog, setShowBuddyDialog] = useState(false);
   const [priceRange, setPriceRange] = useState('Any');
   const [forceLoad, setForceLoad] = useState(false);
 
@@ -125,6 +126,14 @@ export default function Explore() {
               </button>
             </div>
 
+            {/* DEBUG: Show all Travel Buddy buttons */}
+            <div className="mb-4 p-4 bg-y2k-pink/30 border-4 border-y2k-pink rounded-2xl">
+              <p className="font-black text-black mb-2">👥 Travel Buddy Buttons Status</p>
+              <p className="text-sm font-bold">✅ Buttons now at TOP-RIGHT corner of each trip card</p>
+              <p className="text-sm font-bold">🎯 Look for: [👥 BUDDY] in PINK at top of image</p>
+              <p className="text-sm font-bold">📍 Position: Top right, above the trip image</p>
+            </div>
+
             {/* Filter & Search Toolbar */}
             <div className="flex flex-col gap-4 bg-white dark:bg-slate-800 p-4 rounded-3xl border-4 border-black shadow-[8px_8px_0_#000] dark:border-white dark:shadow-[8px_8px_0_#fff] mb-12">
               <div className="relative w-full group">
@@ -199,6 +208,29 @@ export default function Explore() {
                 return (
                 <div key={trip.id} className="masonry-item group cursor-pointer">
                   <div className="block relative overflow-hidden rounded-3xl bg-slate-200 dark:bg-slate-800 dark:border-slate-800 y2k-card dark:shadow-[4px_4px_0_#fff]">
+                    {/* Travel Buddy Button - Top Right */}
+                    <div className="absolute top-4 right-4 z-10">
+                      <button
+                        onClick={(e) => {
+                          e.preventDefault();
+                          e.stopPropagation();
+                          console.log('[Travel Buddy] Button clicked, user:', !!user);
+                          if (!user) {
+                            setAuthModal({ isOpen: true, message: 'Please log in to invite travel buddies!' });
+                            return;
+                          }
+                          console.log('[Travel Buddy] Opening dialog for trip:', trip.id);
+                          setSelectedTrip(trip);
+                          setShowBuddyDialog(true);
+                        }}
+                        title="Invite Travel Buddy"
+                        className="bg-y2k-pink text-black px-3 py-2 rounded-full border-2 border-black hover:scale-105 transition-all font-black text-xs shadow-[2px_2px_0_#000] flex items-center gap-1"
+                      >
+                        <span className="material-symbols-outlined text-[14px]">group_add</span>
+                        BUDDY
+                      </button>
+                    </div>
+                    
                     {index === 0 && ( /* Mark the #1 trip as trending */
                       <div className="absolute top-4 left-4 z-10 bg-primary border-2 border-black dark:border-white px-3 py-1 flex items-center gap-1.5 shadow-[4px_4px_0_#000] dark:shadow-[4px_4px_0_#fff]">
                         <span className="text-black text-xs font-black uppercase tracking-tighter">🔥 Trending</span>
@@ -272,25 +304,6 @@ export default function Explore() {
                               {savedTripIds.includes(trip.id) ? 'bookmark' : 'bookmark_border'}
                             </span>
                           </button>
-                          <button
-                            onClick={(e) => {
-                              e.preventDefault();
-                              e.stopPropagation();
-                              console.log('[Travel Buddy] Button clicked, user:', !!user);
-                              if (!user) {
-                                setAuthModal({ isOpen: true, message: 'Please log in to invite travel buddies!' });
-                                return;
-                              }
-                              console.log('[Travel Buddy] Opening modal for trip:', trip.id);
-                              setSelectedTrip(trip);
-                              setShowBuddyModal(true);
-                            }}
-                            title="Invite Travel Buddy"
-                            className="flex items-center gap-1 hover:text-y2k-pink transition-colors z-20 bg-y2k-pink/20 p-1 rounded"
-                          >
-                            <span className="material-symbols-outlined text-[18px]">group_add</span>
-                            <span className="text-xs font-black">BUDDY</span>
-                          </button>
                         </div>
                       </div>
                     </div>
@@ -316,10 +329,10 @@ export default function Explore() {
         message={authModal.message}
       />
       
-      <TravelBuddyModal
-        isOpen={showBuddyModal}
+      <TravelBuddyDialog
+        isOpen={showBuddyDialog}
         onClose={() => {
-          setShowBuddyModal(false);
+          setShowBuddyDialog(false);
           setSelectedTrip(null);
         }}
         trip={selectedTrip}

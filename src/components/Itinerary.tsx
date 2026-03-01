@@ -1,13 +1,14 @@
-import React, { useMemo, useState } from 'react';
+import React, { useMemo, useState, useEffect } from 'react';
 import { Link, useParams, useNavigate } from 'react-router-dom';
 import { useTravel, LocationCategory } from '../context/TravelContext';
 import AuthModal from './AuthModal';
 import NotificationsDropdown from './NotificationsDropdown';
+import TravelBuddyInvitations from './TravelBuddyInvitations';
 
 export default function Itinerary() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
-  const { user, trips, locations, reviews, tripComments, notifications, isLoading, isAuthLoading, error, convertCurrency, addTripComment, updateTrip, uploadImage, addLocation, followedUserIds, unfollowUser, followUser, toggleTripLike, savedTripIds, unsaveTrip, saveTrip } = useTravel();
+  const { user, trips, locations, reviews, tripComments, notifications, isLoading, isAuthLoading, error, convertCurrency, addTripComment, updateTrip, uploadImage, addLocation, followedUserIds, unfollowUser, followUser, toggleTripLike, savedTripIds, unsaveTrip, saveTrip, getTravelBuddyRequests } = useTravel();
 
   const [activeTab, setActiveTab] = useState<'overview' | 'itinerary' | 'budget' | 'comments'>('overview');
 
@@ -53,6 +54,13 @@ export default function Itinerary() {
     const ok = await addTripComment({ tripId: trip!.id, comment: newComment.trim() });
     if (ok) setNewComment('');
   };
+
+  // Load travel buddy requests when user and trip are available
+  useEffect(() => {
+    if (user && trip && (user.id === trip.userId)) {
+      getTravelBuddyRequests(user.id);
+    }
+  }, [user, trip, getTravelBuddyRequests]);
 
   // If trip is not found, render fallback
   if (!trip) {
@@ -376,6 +384,12 @@ export default function Itinerary() {
                       <span className="text-xs font-bold text-slate-500 uppercase">Likes</span>
                     </div>
                   </div>
+
+                  {/* Travel Buddy Invitations */}
+                  <TravelBuddyInvitations 
+                    tripId={trip.id} 
+                    isTripOwner={user?.id === trip.userId}
+                  />
                 </div>
               </div>
             )}

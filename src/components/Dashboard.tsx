@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useTravel } from '../context/TravelContext';
 import Sidebar from './Sidebar';
 import NotificationsDropdown from './NotificationsDropdown';
+import TourGuide from './TourGuide';
 
 export default function Dashboard() {
   const { user, trips, locations, reviews, followedUserIds, deleteTrip, toggleTripLike, savedTripIds } = useTravel();
@@ -141,13 +142,24 @@ export default function Dashboard() {
       <Sidebar />
 
       {/* Main Content Area */}
-      <main className="flex-1 flex flex-col overflow-y-auto relative">
+      <main className="flex-1 flex flex-col overflow-y-auto relative dashboard-overview">
         {/* Top Header */}
         <header className="sticky top-0 z-30 flex items-center justify-between px-8 py-4 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border-b-4 border-black dark:border-white transition-colors">
           <div className="flex-1 max-w-md hidden md:block">
             <h2 className="text-xl font-bold tracking-tight italic uppercase dark:text-white transition-colors">Dashboard</h2>
           </div>
           <div className="flex items-center gap-4 ml-auto">
+            <button
+              onClick={() => {
+                localStorage.removeItem('nomadly:hasSeenTour');
+                window.location.reload();
+              }}
+              className="bg-y2k-pink text-black px-4 py-2 rounded-full text-sm font-black uppercase italic flex items-center gap-2 hover:scale-105 transition-transform border-2 border-black"
+              title="Start Tour Guide"
+            >
+              <span className="material-symbols-outlined text-sm">tour</span>
+              Tour
+            </button>
             <NotificationsDropdown />
             {user?.isAdmin && (
               <Link to="/admin" className="bg-black text-white px-6 py-2 rounded-full text-sm font-black uppercase italic flex items-center gap-2 hover:scale-105 transition-transform border-2 border-transparent">
@@ -400,7 +412,7 @@ export default function Dashboard() {
                 </div>
               )}
             </div>
-            <div className="y2k-card rounded-2xl p-6 bg-primary flex flex-col justify-between">
+            <div className="y2k-card rounded-2xl p-6 bg-primary flex flex-col justify-between social-features">
               <div>
                 <div className="flex justify-between items-center mb-2">
                   <h3 className="text-black font-black text-xl">Nomadly Suggestions</h3>
@@ -472,7 +484,7 @@ export default function Dashboard() {
         </div>
 
         {/* Floating Action Button */}
-        <Link to="/create-trip" className="fixed bottom-10 right-10 size-16 bg-primary text-black rounded-full flex items-center justify-center border-4 border-black shadow-[8px_8px_0px_rgba(138,206,0,0.3)] hover:scale-110 transition-transform z-50 group">
+        <Link to="/create-trip" className="fixed bottom-10 right-10 size-16 bg-primary text-black rounded-full flex items-center justify-center border-4 border-black shadow-[8px_8px_0px_rgba(138,206,0,0.3)] hover:scale-110 transition-transform z-50 group create-trip-btn">
           <span className="material-symbols-outlined text-3xl group-hover:rotate-90 transition-transform">add</span>
         </Link>
 

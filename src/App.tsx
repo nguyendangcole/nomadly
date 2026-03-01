@@ -12,6 +12,7 @@ import UserProfile from './components/UserProfile';
 import LandingPage from './components/LandingPage';
 import AdminDashboard from './components/AdminDashboard';
 import Settings from './components/Settings';
+import TourGuide from './components/TourGuide';
 import { TravelProvider, useTravel } from './context/TravelContext';
 
 const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
@@ -52,6 +53,7 @@ export default function App() {
             </div>
           } />
         </Routes>
+        <TourGuide />
       </TravelProvider>
     </Router>
   );

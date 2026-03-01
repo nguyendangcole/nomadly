@@ -34,9 +34,9 @@ export default function Sidebar() {
     // Define nav items to map over them
     const navItems = [
         ...(user ? [{ to: '/dashboard', icon: 'dashboard', label: 'Dashboard' }] : []),
-        { to: '/explore', icon: 'map', label: 'Explore' },
-        ...(user ? [{ to: '/my-trips', icon: 'travel_explore', label: 'My Trips' }] : []),
-        { to: '/vibe-feed', icon: 'group', label: 'Vibe Feed' },
+        { to: '/explore', icon: 'map', label: 'Explore', className: 'explore-link' },
+        ...(user ? [{ to: '/my-trips', icon: 'travel_explore', label: 'My Trips', className: 'my-trips-link' }] : []),
+        { to: '/vibe-feed', icon: 'group', label: 'Vibe Feed', className: 'vibe-feed-link' },
     ];
 
     const handleAvatarUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -106,7 +106,7 @@ export default function Sidebar() {
                             } ${isActive
                                 ? 'bg-primary text-black border-2 border-black dark:border-white font-black uppercase italic shadow-[2px_2px_0_#000] dark:shadow-[2px_2px_0_#fff] ' + (!isExpanded && 'mx-auto w-12 h-12')
                                 : 'hover:bg-slate-200 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-300 font-medium ' + (!isExpanded && 'mx-auto w-12 h-12')
-                            }`
+                            } ${item.className || ''}`
                         }
                         title={!isExpanded ? item.label : undefined}
                     >
@@ -137,7 +137,7 @@ export default function Sidebar() {
                 {user ? (
                     <NavLink
                         to={`/profile/${user.id}`}
-                        className={`w-full flex items-center bg-slate-100 dark:bg-slate-800 rounded-xl border-2 border-transparent hover:border-black dark:hover:border-white transition-colors cursor-pointer ${isExpanded ? 'gap-3 p-2' : 'p-2 justify-center'
+                        className={`w-full flex items-center bg-slate-100 dark:bg-slate-800 rounded-xl border-2 border-transparent hover:border-black dark:hover:border-white transition-colors cursor-pointer profile-link ${isExpanded ? 'gap-3 p-2' : 'p-2 justify-center'
                             }`}
                     >
                         <img

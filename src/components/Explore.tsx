@@ -107,6 +107,24 @@ export default function Explore() {
               🔥 Trending <span className="text-primary">This Week</span>
             </h1>
 
+            {/* DEBUG: Test Travel Buddy Button */}
+            <div className="mb-4 p-4 bg-y2k-yellow border-4 border-black rounded-2xl">
+              <p className="font-black text-black mb-2">🔧 DEBUG: Travel Buddy Test</p>
+              <button
+                onClick={() => {
+                  console.log('[DEBUG] Test button clicked, user:', !!user);
+                  if (!user) {
+                    alert('Please login first!');
+                    return;
+                  }
+                  alert('Travel Buddy feature is working! 🎉');
+                }}
+                className="bg-y2k-pink text-black px-4 py-2 rounded-full font-black border-2 border-black"
+              >
+                Test Travel Buddy (User: {user ? '✅' : '❌'})
+              </button>
+            </div>
+
             {/* Filter & Search Toolbar */}
             <div className="flex flex-col gap-4 bg-white dark:bg-slate-800 p-4 rounded-3xl border-4 border-black shadow-[8px_8px_0_#000] dark:border-white dark:shadow-[8px_8px_0_#fff] mb-12">
               <div className="relative w-full group">
@@ -268,9 +286,10 @@ export default function Explore() {
                               setShowBuddyModal(true);
                             }}
                             title="Invite Travel Buddy"
-                            className="flex items-center gap-1 hover:text-y2k-pink transition-colors z-20"
+                            className="flex items-center gap-1 hover:text-y2k-pink transition-colors z-20 bg-y2k-pink/20 p-1 rounded"
                           >
                             <span className="material-symbols-outlined text-[18px]">group_add</span>
+                            <span className="text-xs font-black">BUDDY</span>
                           </button>
                         </div>
                       </div>

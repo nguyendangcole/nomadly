@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import AlertModal from './AlertModal';
 
 interface ProUpgradeModalProps {
   isOpen: boolean;
@@ -9,6 +10,12 @@ export default function ProUpgradeModal({ isOpen, onClose }: ProUpgradeModalProp
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [email, setEmail] = useState('');
   const [message, setMessage] = useState('');
+  const [alertModal, setAlertModal] = useState<{
+    isOpen: boolean;
+    title: string;
+    message: string;
+    type: 'success' | 'error' | 'warning' | 'info';
+  } | null>(null);
 
   if (!isOpen) return null;
 
@@ -20,16 +27,29 @@ export default function ProUpgradeModal({ isOpen, onClose }: ProUpgradeModalProp
       // Gửi request lên admin (mock implementation)
       console.log('Pro upgrade request:', { email, message });
       
-      // Hiển thị success message
-      alert('🎉 Request sent successfully! \n\nWe\'ll review your request and contact you soon.\n\nThank you for your interest in Nomadly Pro!');
+      // Hiển thị success modal
+      setAlertModal({
+        isOpen: true,
+        title: 'Request Sent!',
+        message: '🎉 Your Pro upgrade request has been sent successfully! We\'ll review your request and contact you soon.\n\nThank you for your interest in Nomadly Pro!',
+        type: 'success'
+      });
       
       // Reset form
       setEmail('');
       setMessage('');
-      onClose();
+      setTimeout(() => {
+        setAlertModal(null);
+        onClose();
+      }, 2000);
     } catch (error) {
       console.error('Error sending request:', error);
-      alert('❌ Failed to send request. Please try again.');
+      setAlertModal({
+        isOpen: true,
+        title: 'Request Failed',
+        message: '❌ Failed to send your request. Please try again.',
+        type: 'error'
+      });
     } finally {
       setIsSubmitting(false);
     }
@@ -123,6 +143,17 @@ export default function ProUpgradeModal({ isOpen, onClose }: ProUpgradeModalProp
           </div>
         </div>
       </div>
+      
+      {/* Alert Modal */}
+      {alertModal && (
+        <AlertModal
+          isOpen={alertModal.isOpen}
+          onClose={() => setAlertModal(null)}
+          title={alertModal.title}
+          message={alertModal.message}
+          type={alertModal.type}
+        />
+      )}
     </div>
   );
 }

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useTravel } from '../context/TravelContext';
+import AlertModal from './AlertModal';
 
 interface TravelBuddyRequest {
   id: string;
@@ -15,14 +16,21 @@ interface TravelBuddyRequest {
 interface TravelBuddyModalProps {
   isOpen: boolean;
   onClose: () => void;
-  trip: any;
+  tripId: string;
+  tripTitle: string;
   currentUser: any;
 }
 
-export default function TravelBuddyModal({ isOpen, onClose, trip, currentUser }: TravelBuddyModalProps) {
+export default function TravelBuddyModal({ isOpen, onClose, tripId, tripTitle, currentUser }: TravelBuddyModalProps) {
   const { user, createTravelBuddyRequest } = useTravel();
   const [message, setMessage] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [alertModal, setAlertModal] = useState<{
+    isOpen: boolean;
+    title: string;
+    message: string;
+    type: 'success' | 'error' | 'warning' | 'info';
+  } | null>(null);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -31,24 +39,38 @@ export default function TravelBuddyModal({ isOpen, onClose, trip, currentUser }:
     setIsSubmitting(true);
     try {
       await createTravelBuddyRequest({
-        tripId: trip.id,
+        tripId: tripId,
         requesterId: currentUser.id,
         message: message.trim(),
       });
       
-      // Show success message
-      alert('Travel buddy request sent successfully! 🎉');
-      onClose();
-      setMessage('');
+      // Show success modal
+      setAlertModal({
+        isOpen: true,
+        title: 'Request Sent!',
+        message: '🎉 Your travel buddy request has been sent successfully! The trip owner will review your request.',
+        type: 'success'
+      });
+      
+      setTimeout(() => {
+        setAlertModal(null);
+        onClose();
+        setMessage('');
+      }, 2000);
     } catch (error) {
       console.error('Error sending buddy request:', error);
-      alert('Failed to send request. Please try again.');
+      setAlertModal({
+        isOpen: true,
+        title: 'Request Failed',
+        message: '❌ Failed to send your travel buddy request. Please try again.',
+        type: 'error'
+      });
     } finally {
       setIsSubmitting(false);
     }
   };
 
-  if (!isOpen || !trip || !currentUser) return null;
+  if (!isOpen || !tripId || !currentUser) return null;
 
   return (
     <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm">
@@ -148,5 +170,16 @@ export default function TravelBuddyModal({ isOpen, onClose, trip, currentUser }:
         </div>
       </div>
     </div>
+    
+    {/* Alert Modal */}
+    {alertModal && (
+      <AlertModal
+        isOpen={alertModal.isOpen}
+        onClose={() => setAlertModal(null)}
+        title={alertModal.title}
+        message={alertModal.message}
+        type={alertModal.type}
+      />
+    )}
   );
 }

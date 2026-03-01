@@ -1,0 +1,139 @@
+@import "tailwindcss";
+
+@custom-variant dark (&:is(.dark *));
+
+
+@theme {
+  --font-display: "Space Grotesk", sans-serif;
+  --color-primary: #8ACE00;
+  --color-accent-pink: #FF00FF;
+  --color-accent-blue: #00F0FF;
+  --color-y2k-pink: #ff007f;
+  --color-y2k-blue: #0047ff;
+  --color-y2k-orange: #ff8800;
+}
+
+@layer base {
+  body {
+    @apply font-display antialiased;
+  }
+}
+
+@layer components {
+  .y2k-gloss {
+    background: rgba(255, 255, 255, 0.7);
+    backdrop-filter: blur(10px);
+    border: 2px solid rgba(138, 206, 0, 0.3);
+    box-shadow: 0 8px 32px 0 rgba(138, 206, 0, 0.15), inset 0 0 10px rgba(255, 255, 255, 0.5);
+  }
+
+  .y2k-gradient-bg {
+    background: linear-gradient(135deg, #8ACE00 0%, #00F0FF 50%, #FF00FF 100%);
+    background-size: 400% 400%;
+    animation: gradient 15s ease infinite;
+  }
+
+  @keyframes gradient {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+  }
+
+  .y2k-card {
+    @apply border-3 border-black;
+    box-shadow: 4px 4px 0px #000;
+    transition: all 0.2s ease;
+  }
+
+  .y2k-card:hover {
+    transform: translate(-2px, -2px);
+    box-shadow: 6px 6px 0px #000;
+  }
+
+  .glossy-green {
+    background: linear-gradient(180deg, #aaff00 0%, #88cc00 100%);
+    @apply border-2 border-black;
+    box-shadow: inset 0 2px 4px rgba(255,255,255,0.5);
+  }
+
+  .brat-shadow {
+    box-shadow: 8px 8px 0px rgba(136, 204, 0, 0.3);
+  }
+
+  .y2k-button {
+    @apply border-2 border-black;
+    box-shadow: 4px 4px 0px #000;
+    transition: all 0.1s;
+  }
+
+  .y2k-button:active {
+    transform: translate(2px, 2px);
+    box-shadow: 2px 2px 0px #000;
+  }
+
+  .y2k-shadow {
+    box-shadow: 4px 4px 0px 0px #000000;
+  }
+
+  .y2k-border {
+    @apply border-2 border-black;
+  }
+
+  .glass-panel {
+    background: rgba(255, 255, 255, 0.7);
+    backdrop-filter: blur(12px);
+    @apply border-3 border-black;
+    box-shadow: 8px 8px 0px #000;
+  }
+
+  .neo-brutalism-card {
+    @apply border-3 border-black;
+  }
+
+  .y2k-input {
+    box-shadow: inset 4px 4px 0 rgba(0,0,0,0.05);
+    @apply border-3 border-black;
+  }
+
+  .glossy-button {
+    background: linear-gradient(180deg, rgba(255,255,255,0.8) 0%, rgba(255,255,255,0) 100%), #88cc00;
+    box-shadow: 0 4px 0 #5e8a00, inset 0 1px 0 rgba(255,255,255,0.5);
+    transition: all 0.1s active;
+  }
+
+  .glossy-button:active {
+    transform: translateY(2px);
+    box-shadow: 0 2px 0 #5e8a00;
+  }
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+@keyframes marquee {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+.animate-marquee {
+  animation: marquee 20s linear infinite;
+}
+
+.masonry-grid {
+  column-count: 1;
+  column-gap: 1.5rem;
+}
+@media (min-width: 640px) { .masonry-grid { column-count: 2; } }
+@media (min-width: 1024px) { .masonry-grid { column-count: 3; } }
+.masonry-item {
+  break-inside: avoid;
+  margin-bottom: 1.5rem;
+}
+
+.border-3 {
+  border-width: 3px;
+}

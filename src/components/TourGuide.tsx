@@ -99,8 +99,14 @@ const TourGuide: React.FC = () => {
       console.log('[TourGuide] Starting tour for new user...');
       // Show tour after a short delay to let page load
       setTimeout(() => {
-        console.log('[TourGuide] Setting isActive to true');
-        setIsActive(true);
+        // Double-check hasn't been marked as seen
+        const checkAgain = localStorage.getItem('nomadly:hasSeenTour');
+        if (!checkAgain) {
+          console.log('[TourGuide] Setting isActive to true');
+          setIsActive(true);
+        } else {
+          console.log('[TourGuide] Tour was marked as seen during delay, not starting');
+        }
       }, 1500);
     } else {
       console.log('[TourGuide] User has already seen tour');
@@ -131,13 +137,17 @@ const TourGuide: React.FC = () => {
   };
 
   const completeTour = () => {
+    console.log('[TourGuide] Completing tour...');
     setIsActive(false);
     localStorage.setItem('nomadly:hasSeenTour', 'true');
+    console.log('[TourGuide] Set hasSeenTour to true');
   };
 
   const skipTour = () => {
+    console.log('[TourGuide] Skipping tour...');
     setIsActive(false);
     localStorage.setItem('nomadly:hasSeenTour', 'true');
+    console.log('[TourGuide] Set hasSeenTour to true (skip)');
   };
 
   const highlightTarget = (target?: string) => {
@@ -165,16 +175,8 @@ const TourGuide: React.FC = () => {
     return null;
   }
   
-  // TEMPORARY: Always show tour for logged-in users for testing
-  console.log('[TourGuide] User is logged in, checking tour state...');
-  
   if (!isActive) {
     console.log('[TourGuide] Not rendering: Tour not active');
-    // TEMPORARY: Auto-activate tour for testing
-    setTimeout(() => {
-      console.log('[TourGuide] AUTO-ACTIVATING TOUR FOR TESTING');
-      setIsActive(true);
-    }, 2000);
     return null;
   }
 

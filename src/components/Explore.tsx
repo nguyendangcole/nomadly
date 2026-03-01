@@ -1,10 +1,12 @@
-import React, { useState, useMemo, useEffect } from 'react';
+import React, { useMemo, useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useTravel } from '../context/TravelContext';
-import TravelBuddyDialog from './TravelBuddyDialog';
 import Sidebar from './Sidebar';
-import AuthModal from './AuthModal';
 import NotificationsDropdown from './NotificationsDropdown';
+import TourGuide from './TourGuide';
+import TravelBuddyDialog from './TravelBuddyDialog';
+import GoProButton from './GoProButton';
+import AuthModal from './AuthModal';
 
 export default function Explore() {
   const { user, trips, locations, reviews, isLoading, error, savedTripIds, saveTrip, unsaveTrip, followedUserIds, followUser, unfollowUser, toggleTripLike } = useTravel();
@@ -79,15 +81,7 @@ export default function Explore() {
           </div>
           <div className="flex items-center gap-4 ml-auto">
             <NotificationsDropdown />
-            <button 
-              onClick={() => {
-                alert('🚀 Pro features coming soon! \n\nFuture Pro benefits:\n• Unlimited AI trip generation\n• Advanced travel analytics\n• Priority support\n• Exclusive trip templates\n• Ad-free experience\n\nFor now, enjoy all free features! 🎉');
-              }}
-              className="glossy-green text-black dark:border-white px-6 py-2 rounded-full text-sm font-black uppercase italic flex items-center gap-2 hover:scale-105 transition-transform"
-            >
-              <span className="material-symbols-outlined text-sm">upgrade</span>
-              Go Pro
-            </button>
+            <GoProButton />
           </div>
         </header>
 

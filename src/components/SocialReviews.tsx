@@ -1,10 +1,11 @@
 import React, { useMemo, useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useTravel } from '../context/TravelContext';
-import { supabase } from '../lib/supabase';
 import Sidebar from './Sidebar';
-import AuthModal from './AuthModal';
 import NotificationsDropdown from './NotificationsDropdown';
+import GoProButton from './GoProButton';
+import AuthModal from './AuthModal';
+import { supabase } from '../lib/supabase';
 
 type FeedTab = 'following' | 'discover';
 
@@ -106,9 +107,7 @@ export default function SocialReviews() {
                     <h2 className="text-xl font-bold tracking-tight italic uppercase dark:text-white">Social Vibe Feed</h2>
                     <div className="flex items-center gap-4">
                         <NotificationsDropdown />
-                        <button className="glossy-green text-black px-6 py-2 rounded-full text-sm font-black uppercase italic flex items-center gap-2 hover:scale-105 transition-transform">
-                            <span className="material-symbols-outlined text-sm">upgrade</span>Go Pro
-                        </button>
+                        <GoProButton />
                     </div>
                 </header>
 

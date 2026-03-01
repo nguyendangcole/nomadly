@@ -4,6 +4,7 @@ import { useTravel } from '../context/TravelContext';
 import Sidebar from './Sidebar';
 import NotificationsDropdown from './NotificationsDropdown';
 import TourGuide from './TourGuide';
+import GoProButton from './GoProButton';
 
 export default function Dashboard() {
   const { user, trips, locations, reviews, followedUserIds, deleteTrip, toggleTripLike, savedTripIds, createTrip } = useTravel();
@@ -339,12 +340,7 @@ export default function Dashboard() {
                 Admin Panel
               </Link>
             )}
-            {user?.plan !== 'pro' && (
-              <button onClick={() => setShowProModal(true)} className="glossy-green text-black dark:border-white px-6 py-2 rounded-full text-sm font-black uppercase italic flex items-center gap-2 hover:scale-105 transition-transform">
-                <span className="material-symbols-outlined text-sm">upgrade</span>
-                Go Pro
-              </button>
-            )}
+            <GoProButton />
           </div>
         </header>
 

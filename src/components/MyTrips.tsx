@@ -1,8 +1,9 @@
 import React, { useMemo, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useTravel } from '../context/TravelContext';
 import Sidebar from './Sidebar';
 import NotificationsDropdown from './NotificationsDropdown';
+import GoProButton from './GoProButton';
 
 type Tab = 'myTrips' | 'saved';
 
@@ -56,10 +57,7 @@ export default function MyTrips() {
                     </div>
                     <div className="flex items-center gap-4">
                         <NotificationsDropdown />
-                        <button className="glossy-green text-black dark:border-white px-6 py-2 rounded-full text-sm font-black uppercase italic flex items-center gap-2 hover:scale-105 transition-transform">
-                            <span className="material-symbols-outlined text-sm">upgrade</span>
-                            Go Pro
-                        </button>
+                        <GoProButton />
                     </div>
                 </header>
 

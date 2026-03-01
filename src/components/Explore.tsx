@@ -9,7 +9,6 @@ import NotificationsDropdown from './NotificationsDropdown';
 export default function Explore() {
   const { user, trips, locations, reviews, isLoading, error, savedTripIds, saveTrip, unsaveTrip, followedUserIds, followUser, unfollowUser, toggleTripLike } = useTravel();
   const navigate = useNavigate();
-  console.log('[Explore] Component rendering, user:', !!user, 'trips count:', trips.length);
   const [authModal, setAuthModal] = useState({ isOpen: false, message: '' });
   const [search, setSearch] = useState('');
   const [activeFilter, setActiveFilter] = useState('All');
@@ -108,32 +107,6 @@ export default function Explore() {
               🔥 Trending <span className="text-primary">This Week</span>
             </h1>
 
-            {/* DEBUG: Test Travel Buddy Button */}
-            <div className="mb-4 p-4 bg-y2k-yellow border-4 border-black rounded-2xl">
-              <p className="font-black text-black mb-2">🔧 DEBUG: Travel Buddy Test</p>
-              <button
-                onClick={() => {
-                  console.log('[DEBUG] Test button clicked, user:', !!user);
-                  if (!user) {
-                    alert('Please login first!');
-                    return;
-                  }
-                  alert('Travel Buddy feature is working! 🎉');
-                }}
-                className="bg-y2k-pink text-black px-4 py-2 rounded-full font-black border-2 border-black"
-              >
-                Test Travel Buddy (User: {user ? '✅' : '❌'})
-              </button>
-            </div>
-
-            {/* DEBUG: Show all Travel Buddy buttons */}
-            <div className="mb-4 p-4 bg-y2k-pink/30 border-4 border-y2k-pink rounded-2xl">
-              <p className="font-black text-black mb-2">👥 Travel Buddy Buttons Status</p>
-              <p className="text-sm font-bold">✅ Buttons now at TOP-RIGHT corner of each trip card</p>
-              <p className="text-sm font-bold">🎯 Look for: [👥 BUDDY] in PINK at top of image</p>
-              <p className="text-sm font-bold">📍 Position: Top right, above the trip image</p>
-            </div>
-
             {/* Filter & Search Toolbar */}
             <div className="flex flex-col gap-4 bg-white dark:bg-slate-800 p-4 rounded-3xl border-4 border-black shadow-[8px_8px_0_#000] dark:border-white dark:shadow-[8px_8px_0_#fff] mb-12">
               <div className="relative w-full group">
@@ -203,9 +176,7 @@ export default function Explore() {
                 No trips found matching your criteria.
               </div>
             ) : (
-              publicTrips.map((trip, index) => {
-                console.log('[Explore] Rendering trip:', trip.id, 'user logged in:', !!user);
-                return (
+              publicTrips.map((trip, index) => (
                 <div key={trip.id} className="masonry-item group cursor-pointer">
                   <div className="block relative overflow-hidden rounded-3xl bg-slate-200 dark:bg-slate-800 dark:border-slate-800 y2k-card dark:shadow-[4px_4px_0_#fff]">
                     {/* Travel Buddy Button - Top Right */}
@@ -214,12 +185,10 @@ export default function Explore() {
                         onClick={(e) => {
                           e.preventDefault();
                           e.stopPropagation();
-                          console.log('[Travel Buddy] Button clicked, user:', !!user);
                           if (!user) {
                             setAuthModal({ isOpen: true, message: 'Please log in to invite travel buddies!' });
                             return;
                           }
-                          console.log('[Travel Buddy] Opening dialog for trip:', trip.id);
                           setSelectedTrip(trip);
                           setShowBuddyDialog(true);
                         }}
@@ -309,8 +278,7 @@ export default function Explore() {
                     </div>
                   </div>
                 </div>
-                );
-              })
+              ))
             )}
           </div>
 

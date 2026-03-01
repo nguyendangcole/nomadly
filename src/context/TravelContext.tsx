@@ -199,6 +199,7 @@ type TravelContextValue = {
   // Travel Buddy actions
   createTravelBuddyRequest: (params: { tripId: string; requesterId: string; message: string }) => Promise<void>;
   updateTravelBuddyRequest: (id: string, status: 'accepted' | 'declined') => Promise<void>;
+  deleteTravelBuddyRequest: (id: string) => Promise<void>;
   getTravelBuddyRequests: (userId: string) => Promise<void>;
 
   // Theme actions
@@ -1017,7 +1018,8 @@ export const TravelProvider: React.FC<{ children: React.ReactNode }> = ({ childr
       // Add to local state
       setTravelBuddyRequests(prev => [data, ...prev]);
 
-      console.log('Travel buddy request sent successfully:', data);
+      // Refresh requests to get full data with joins
+      await getTravelBuddyRequests(params.requesterId);
     } catch (err: any) {
       console.error('Error creating travel buddy request:', err);
       throw err;
@@ -1045,23 +1047,55 @@ export const TravelProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     }
   };
 
-  const getTravelBuddyRequests = async (userId: string) => {
+  const deleteTravelBuddyRequest = async (id: string) => {
     try {
-      const { data, error } = await supabase
+      const { error } = await supabase
         .from('travel_buddy_requests')
-        .select(`
-          *,
-          trip:trips(id, title, destination_summary, start_date, end_date),
-          requester:profiles(name, avatar_url)
-        `)
-        .or(`requester_id.eq.${userId},trip.trips.user_id.eq.${userId}`)
-        .order('created_at', { ascending: false });
+        .delete()
+        .eq('id', id);
 
       if (error) throw error;
+
+      // Remove from local state
+      setTravelBuddyRequests(prev => prev.filter(req => req.id !== id));
+
+      console.log(`Travel buddy request ${id} deleted`);
+    } catch (err: any) {
+      console.error('Error deleting travel buddy request:', err);
+      throw err;
+    }
+  };
+
+  const getTravelBuddyRequests = async (userId: string) => {
+    try {
+      // Simple query first to test
+      const { data, error } = await supabase
+        .from('travel_buddy_requests')
+        .select('*')
+        .eq('status', 'pending')
+        .order('created_at', { ascending: false });
+
+      if (error) {
+        console.error('[Travel Buddy] Simple query error:', error);
+        throw error;
+      }
 
       setTravelBuddyRequests(data || []);
     } catch (err: any) {
       console.error('Error fetching travel buddy requests:', err);
+      // Try without status filter as fallback
+      try {
+        const { data, error } = await supabase
+          .from('travel_buddy_requests')
+          .select('*')
+          .order('created_at', { ascending: false });
+
+        if (!error) {
+          setTravelBuddyRequests(data || []);
+        }
+      } catch (fallbackErr) {
+        console.error('Fallback also failed:', fallbackErr);
+      }
     }
   };
 
@@ -1104,6 +1138,7 @@ export const TravelProvider: React.FC<{ children: React.ReactNode }> = ({ childr
       // Travel Buddy functions
       createTravelBuddyRequest,
       updateTravelBuddyRequest,
+      deleteTravelBuddyRequest,
       getTravelBuddyRequests,
       
       // Currency functions

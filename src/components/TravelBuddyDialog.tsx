@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useTravel } from '../context/TravelContext';
+import NotificationPopup from './NotificationPopup';
 
 interface TravelBuddyDialogProps {
   isOpen: boolean;
@@ -12,6 +13,25 @@ export default function TravelBuddyDialog({ isOpen, onClose, trip, currentUser }
   const { user, createTravelBuddyRequest } = useTravel();
   const [message, setMessage] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [notification, setNotification] = useState<{
+    isOpen: boolean;
+    title: string;
+    message: string;
+    type: 'success' | 'error' | 'info' | 'warning';
+  }>({
+    isOpen: false,
+    title: '',
+    message: '',
+    type: 'info'
+  });
+
+  const showNotification = (title: string, message: string, type: 'success' | 'error' | 'info' | 'warning') => {
+    setNotification({ isOpen: true, title, message, type });
+  };
+
+  const closeNotification = () => {
+    setNotification(prev => ({ ...prev, isOpen: false }));
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -25,13 +45,13 @@ export default function TravelBuddyDialog({ isOpen, onClose, trip, currentUser }
         message: message.trim(),
       });
       
-      // Show success message
-      alert('Travel buddy request sent successfully! 🎉');
+      // Show success notification
+      showNotification('Success!', 'Travel buddy request sent successfully! 🎉', 'success');
       onClose();
       setMessage('');
     } catch (error) {
       console.error('Error sending buddy request:', error);
-      alert('Failed to send request. Please try again.');
+      showNotification('Error!', 'Failed to send request. Please try again.', 'error');
     } finally {
       setIsSubmitting(false);
     }
@@ -136,6 +156,15 @@ export default function TravelBuddyDialog({ isOpen, onClose, trip, currentUser }
           </p>
         </div>
       </div>
+
+      {/* Notification Popup */}
+      <NotificationPopup
+        isOpen={notification.isOpen}
+        onClose={closeNotification}
+        title={notification.title}
+        message={notification.message}
+        type={notification.type}
+      />
     </div>
   );
 }

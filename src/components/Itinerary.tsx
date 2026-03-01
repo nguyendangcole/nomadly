@@ -3,7 +3,7 @@ import { Link, useParams, useNavigate } from 'react-router-dom';
 import { useTravel, LocationCategory } from '../context/TravelContext';
 import AuthModal from './AuthModal';
 import NotificationsDropdown from './NotificationsDropdown';
-import TravelBuddyInvitations from './TravelBuddyInvitations';
+import PublicTravelBuddyRequests from './PublicTravelBuddyRequests';
 
 export default function Itinerary() {
   const { id } = useParams<{ id: string }>();
@@ -57,7 +57,8 @@ export default function Itinerary() {
 
   // Load travel buddy requests when user and trip are available
   useEffect(() => {
-    if (user && trip && (user.id === trip.userId)) {
+    if (user && trip) {
+      // Load requests for all users to see public requests
       getTravelBuddyRequests(user.id);
     }
   }, [user, trip, getTravelBuddyRequests]);
@@ -385,10 +386,10 @@ export default function Itinerary() {
                     </div>
                   </div>
 
-                  {/* Travel Buddy Invitations */}
-                  <TravelBuddyInvitations 
+                  {/* Public Travel Buddy Requests */}
+                  <PublicTravelBuddyRequests 
                     tripId={trip.id} 
-                    isTripOwner={user?.id === trip.userId}
+                    currentUser={user}
                   />
                 </div>
               </div>

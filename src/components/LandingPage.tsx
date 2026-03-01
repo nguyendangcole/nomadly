@@ -144,6 +144,70 @@ export default function LandingPage() {
                 </div>
             </section>
 
+            {/* --- TRAVEL BUDDY SECTION --- */}
+            <section className="py-24 px-6 md:px-12 max-w-7xl mx-auto z-20 relative">
+                <div className="text-center mb-16 animate-in fade-in duration-700">
+                    <div className="inline-flex items-center gap-2 px-6 py-2 rounded-full bg-y2k-pink text-black font-black uppercase tracking-widest text-sm mb-6 shadow-[4px_4px_0_#000] hover:scale-105 transition-transform duration-300">
+                        <span className="material-symbols-outlined animate-pulse">group_add</span>
+                        Find Your Travel Buddy
+                    </div>
+                    <h2 className="text-5xl md:text-7xl font-black uppercase italic tracking-tighter mb-6">
+                        Never Travel <span className="text-transparent bg-clip-text bg-gradient-to-r from-y2k-pink to-primary">Alone</span> Again
+                    </h2>
+                    <p className="font-bold text-xl text-slate-600 max-w-3xl mx-auto">
+                        Connect with like-minded travelers, join amazing trips, and create unforgettable memories together. Your perfect travel companion is just a click away!
+                    </p>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
+                    {/* Feature 1 */}
+                    <div className="group cursor-pointer animate-in slide-in-from-bottom duration-700" style={{ animationDelay: '100ms' }}>
+                        <div className="bg-white border-4 border-black rounded-2xl p-8 hover:border-y2k-pink transition-all hover:shadow-[8px_8px_0_#000] hover:-translate-y-1 hover:scale-[1.02] text-center">
+                            <div className="w-16 h-16 bg-y2k-pink rounded-2xl flex items-center justify-center text-3xl mx-auto mb-6 shadow-lg group-hover:rotate-12 transition-transform duration-300">
+                                <span className="material-symbols-outlined text-black">search</span>
+                            </div>
+                            <h3 className="font-black text-2xl uppercase mb-4 group-hover:text-y2k-pink transition-colors">Discover Trips</h3>
+                            <p className="text-slate-600 font-bold leading-relaxed">
+                                Browse amazing trips from other travelers and find adventures that match your vibe and interests.
+                            </p>
+                        </div>
+                    </div>
+
+                    {/* Feature 2 */}
+                    <div className="group cursor-pointer animate-in slide-in-from-bottom duration-700" style={{ animationDelay: '200ms' }}>
+                        <div className="bg-white border-4 border-black rounded-2xl p-8 hover:border-y2k-pink transition-all hover:shadow-[8px_8px_0_#000] hover:-translate-y-1 hover:scale-[1.02] text-center">
+                            <div className="w-16 h-16 bg-y2k-pink rounded-2xl flex items-center justify-center text-3xl mx-auto mb-6 shadow-lg group-hover:rotate-12 transition-transform duration-300">
+                                <span className="material-symbols-outlined text-black">send</span>
+                            </div>
+                            <h3 className="font-black text-2xl uppercase mb-4 group-hover:text-y2k-pink transition-colors">Send Requests</h3>
+                            <p className="text-slate-600 font-bold leading-relaxed">
+                                Send personalized travel buddy requests and tell trip owners why you'd be the perfect addition to their adventure.
+                            </p>
+                        </div>
+                    </div>
+
+                    {/* Feature 3 */}
+                    <div className="group cursor-pointer animate-in slide-in-from-bottom duration-700" style={{ animationDelay: '300ms' }}>
+                        <div className="bg-white border-4 border-black rounded-2xl p-8 hover:border-y2k-pink transition-all hover:shadow-[8px_8px_0_#000] hover:-translate-y-1 hover:scale-[1.02] text-center">
+                            <div className="w-16 h-16 bg-y2k-pink rounded-2xl flex items-center justify-center text-3xl mx-auto mb-6 shadow-lg group-hover:rotate-12 transition-transform duration-300">
+                                <span className="material-symbols-outlined text-black">diversity_3</span>
+                            </div>
+                            <h3 className="font-black text-2xl uppercase mb-4 group-hover:text-y2k-pink transition-colors">Connect & Travel</h3>
+                            <p className="text-slate-600 font-bold leading-relaxed">
+                                Get accepted, connect with your travel buddies, and embark on unforgettable adventures together!
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <div className="text-center">
+                    <Link to="/explore" className="inline-flex items-center gap-3 bg-y2k-pink text-black px-8 py-4 rounded-full font-black uppercase tracking-wider text-lg border-4 border-black shadow-[6px_6px_0_#000] hover:scale-110 hover:shadow-[8px_8px_0_#000] hover:-translate-y-1 transition-all duration-300">
+                        <span className="material-symbols-outlined">explore</span>
+                        Find Travel Buddies Now
+                    </Link>
+                </div>
+            </section>
+
             {/* --- ABOUT / INFO SECTION --- */}
             <section className="py-24 px-6 md:px-12 max-w-7xl mx-auto z-20 relative">
                 <div className="flex flex-col md:flex-row items-center gap-16">

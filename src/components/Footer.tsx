@@ -16,7 +16,7 @@ export default function Footer() {
                     <div className="col-span-1 md:col-span-2 space-y-4">
                         <Link to="/" className="inline-flex items-center gap-2 mb-2 group">
                             <div className="bg-primary p-2 border-2 border-transparent group-hover:border-white rounded-lg transition-colors">
-                                <span className="material-symbols-outlined text-black font-bold text-xl">flight_takeoff</span>
+                                <img src="/assets/branding/logo1.png" alt="Nomadly" className="w-6 h-6" />
                             </div>
                             <h2 className="text-3xl font-black tracking-tighter uppercase italic group-hover:text-primary transition-colors">Nomadly</h2>
                         </Link>

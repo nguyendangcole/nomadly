@@ -349,7 +349,7 @@ Return ONLY valid JSON. Make the trip at least 4 locations across the days. Cons
       <header className="border-b-4 border-black bg-white px-6 py-4 flex items-center justify-between sticky top-0 z-50">
         <Link to="/dashboard" className="flex items-center gap-3">
           <div className="bg-primary p-2 border-2 border-black rounded-lg shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
-            <span className="material-symbols-outlined text-black font-bold">flight_takeoff</span>
+            <img src="/assets/branding/logo1.png" alt="Nomadly" className="w-6 h-6" />
           </div>
           <h1 className="text-2xl font-bold tracking-tighter uppercase italic">Nomadly</h1>
         </Link>

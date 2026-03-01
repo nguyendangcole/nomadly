@@ -48,7 +48,7 @@ export default function Review() {
       <header className="sticky top-0 z-50 flex items-center justify-between border-b-4 border-black bg-white px-6 py-4">
         <Link to="/dashboard" className="flex items-center gap-3">
           <div className="bg-primary y2k-border p-1">
-            <span className="material-symbols-outlined text-black font-bold">travel_explore</span>
+            <img src="/assets/branding/logo1.png" alt="Nomadly" className="w-6 h-6" />
           </div>
           <h2 className="text-2xl font-black italic tracking-tighter uppercase">Nomadly</h2>
         </Link>

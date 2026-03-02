@@ -4,6 +4,7 @@ import { useTravel, LocationCategory } from '../context/TravelContext';
 import AuthModal from './AuthModal';
 import NotificationsDropdown from './NotificationsDropdown';
 import PublicTravelBuddyRequests from './PublicTravelBuddyRequests';
+import AlertModal from './AlertModal';
 
 export default function Itinerary() {
   const { id } = useParams<{ id: string }>();
@@ -34,6 +35,12 @@ export default function Itinerary() {
   const [editIsPublic, setEditIsPublic] = useState(false);
   const [isUploadingCover, setIsUploadingCover] = useState(false);
   const [isShareModalOpen, setIsShareModalOpen] = useState(false);
+  const [alertModal, setAlertModal] = useState<{
+    isOpen: boolean;
+    title: string;
+    message: string;
+    type: 'success' | 'error' | 'warning' | 'info';
+  } | null>(null);
 
   const handleOpenLocationModal = (location: any) => {
     setSelectedLocation(location);
@@ -179,7 +186,12 @@ export default function Itinerary() {
       setNewLocCost('');
       setIsAddingLocation(false);
     } else {
-      alert('Error adding location. Are you logged in?');
+      setAlertModal({
+        isOpen: true,
+        title: 'Error Adding Location',
+        message: '❌ Failed to add location. Are you logged in?',
+        type: 'error'
+      });
     }
   };
 
@@ -409,15 +421,17 @@ export default function Itinerary() {
                           </span>
                           Day {dayNum} Itinerary
                         </h3>
-                        <button
-                          onClick={() => {
-                            setNewLocDay(dayNum);
-                            setIsAddingLocation(true);
-                          }}
-                          className="text-primary font-bold text-sm uppercase tracking-widest border-2 border-black px-3 py-1 rounded-lg hover:bg-primary hover:text-white transition-colors"
-                        >
-                          + Add Act
-                        </button>
+                        {user?.id === trip.userId && (
+                          <button
+                            onClick={() => {
+                              setNewLocDay(dayNum);
+                              setIsAddingLocation(true);
+                            }}
+                            className="text-primary font-bold text-sm uppercase tracking-widest border-2 border-black px-3 py-1 rounded-lg hover:bg-primary hover:text-white transition-colors"
+                          >
+                            + Add Act
+                          </button>
+                        )}
                       </div>
 
                       <div className="grid gap-4">
@@ -877,7 +891,12 @@ export default function Itinerary() {
               <button
                 onClick={() => {
                   navigator.clipboard.writeText(window.location.href);
-                  alert('Link copied!');
+                  setAlertModal({
+                    isOpen: true,
+                    title: 'Link Copied!',
+                    message: '🎉 Trip link has been copied to your clipboard!',
+                    type: 'success'
+                  });
                 }}
                 className="y2k-button bg-primary text-black px-6 rounded-xl font-bold uppercase whitespace-nowrap"
               >
@@ -886,6 +905,17 @@ export default function Itinerary() {
             </div>
           </div>
         </div>
+      )}
+      
+      {/* Alert Modal */}
+      {alertModal && (
+        <AlertModal
+          isOpen={alertModal.isOpen}
+          onClose={() => setAlertModal(null)}
+          title={alertModal.title}
+          message={alertModal.message}
+          type={alertModal.type}
+        />
       )}
     </div >
   );
